@@ -1,0 +1,173 @@
+CREATE TABLE IF NOT EXISTS rol (
+    id_rol INTEGER PRIMARY KEY AUTO_INCREMENT,
+    nombre_rol TEXT NOT NULL UNIQUE,
+    descripcion TEXT,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT CHECK (estado IN ('activo', 'inactivo')) DEFAULT 'activo'
+);
+
+-- Tabla Permisos
+CREATE TABLE IF NOT EXISTS permiso (
+    id_permiso INTEGER PRIMARY KEY AUTO_INCREMENT,
+    nombre_permiso TEXT NOT NULL UNIQUE,
+    descripcion TEXT,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT CHECK (estado IN ('activo', 'inactivo')) DEFAULT 'activo'
+);
+
+-- Tabla intermedia roles-permisos
+CREATE TABLE IF NOT EXISTS Rol_Permiso (
+    id_rol INTEGER,
+    id_permiso INTEGER,
+    PRIMARY KEY (id_rol, id_permiso),
+    FOREIGN KEY (id_rol) REFERENCES rol(id_rol),
+    FOREIGN KEY (id_permiso) REFERENCES permiso(id_permiso)
+);
+
+-- Usuarios
+CREATE TABLE IF NOT EXISTS usuario (
+    id_usuario INTEGER PRIMARY KEY AUTO_INCREMENT,
+    nombre TEXT NOT NULL,
+    correo TEXT NOT NULL UNIQUE,
+    contrasena TEXT NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT CHECK (estado IN ('activo', 'inactivo')) DEFAULT 'activo',
+    id_rol INTEGER,
+    FOREIGN KEY (id_rol) REFERENCES rol(id_rol)
+);
+
+-- Clientes
+CREATE TABLE IF NOT EXISTS cliente (
+    id_cliente INTEGER PRIMARY KEY AUTO_INCREMENT,
+    cedula INTEGER NOT NULL UNIQUE,
+    nombre_completo TEXT NOT NULL,
+    correo TEXT NOT NULL UNIQUE,
+    telefono INTEGER NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT CHECK (estado IN ('activo', 'inactivo')) DEFAULT 'activo'
+);
+
+-- Productos
+CREATE TABLE IF NOT EXISTS producto (
+    id_producto INTEGER PRIMARY KEY AUTO_INCREMENT,
+    nombre TEXT NOT NULL,
+    descripcion TEXT,
+    precio REAL NOT NULL,
+    stock INTEGER NOT NULL,
+    fecha_ingreso DATE,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT CHECK (estado IN ('activo', 'inactivo')) DEFAULT 'activo'
+);
+
+-- Ventas
+CREATE TABLE IF NOT EXISTS venta (
+    id_venta INTEGER PRIMARY KEY AUTO_INCREMENT,
+    cedula INTEGER,
+    id_usuario INTEGER,
+    fecha_venta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total REAL,
+    total_con_descuento REAL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT CHECK (estado IN ('activo', 'inactivo')) DEFAULT 'activo',
+    FOREIGN KEY (cedula) REFERENCES cliente(cedula),
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
+-- Detalle de venta
+CREATE TABLE IF NOT EXISTS detalle_venta (
+    id_detalle INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_venta INTEGER,
+    id_producto INTEGER,
+    cantidad INTEGER NOT NULL,
+    precio_unitario REAL NOT NULL,
+    descuento_porcentaje REAL DEFAULT 0.00,
+    subtotal REAL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT CHECK (estado IN ('activo', 'inactivo')) DEFAULT 'activo',
+    FOREIGN KEY (id_venta) REFERENCES venta(id_venta),
+    FOREIGN KEY (id_producto) REFERENCES producto(id_producto)
+);
+
+-- Pagos
+CREATE TABLE IF NOT EXISTS pago (
+    id_pago INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_venta INTEGER,
+    metodo_pago TEXT CHECK (metodo_pago IN ('efectivo', 'tarjeta', 'transferencia')) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado TEXT CHECK (estado IN ('activo', 'inactivo')) DEFAULT 'activo',
+    FOREIGN KEY (id_venta) REFERENCES venta(id_venta)
+);
+
+-- Facturas
+CREATE TABLE IF NOT EXISTS factura (
+    id_factura INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_venta INTEGER,
+    numero_factura TEXT UNIQUE,
+    fecha_emision DATE DEFAULT (DATE('now')),
+    archivo_pdf TEXT,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_venta) REFERENCES venta(id_venta)
+);
+
+-- Historial de compras
+CREATE TABLE IF NOT EXISTS historial_cliente (
+    id_historial INTEGER PRIMARY KEY AUTO_INCREMENT,
+    cedula INTEGER,
+    id_venta INTEGER,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cedula) REFERENCES cliente(cedula),
+    FOREIGN KEY (id_venta) REFERENCES venta(id_venta)
+);
+-- Insertar roles
+INSERT INTO Rol (nombre_rol, descripcion) VALUES
+('Administrador', 'Administra el sistema'),
+('Vendedor', 'Gestiona las ventas');
+
+-- Insertar permisos
+INSERT INTO Permiso (nombre_permiso, descripcion) VALUES
+('Gestionar productos', 'Permite crear, editar y eliminar productos'),
+('Gestionar ventas', 'Permite registrar ventas y ver historial');
+
+-- Asignar permisos a roles
+INSERT INTO Rol_Permiso (id_rol, id_permiso) VALUES
+(1, 1), (1, 2), (2, 2);
+
+-- Insertar usuarios
+INSERT INTO usuario (nombre, correo, contrasena, id_rol) VALUES
+('Juan Pérez', 'juan@ventas.com', '123456', 2),
+('Admin User', 'admin@ventas.com', 'admin123', 1);
+
+-- Insertar clientes
+INSERT INTO cliente (cedula, nombre_completo, correo, telefono) VALUES
+('1044217661', 'Carlos Ramírez', 'carlos@gmail.com', '3001234567'),
+('1053727441', 'Laura Torres', 'laura@hotmail.com', '3019876543');
+
+-- Insertar productos tecnológicos de supervivencia
+INSERT INTO producto (nombre, descripcion, precio, stock, fecha_ingreso) VALUES
+('Garmin Instinct 2', 'Reloj GPS multideporte con sensores inteligentes.', 1450000, 10, '2025-04-10'),
+('Garmin inReach Mini 2', 'Dispositivo de comunicación satelital con GPS.', 1900000, 5, '2025-04-12'),
+('Fenix PD36R Pro', 'Linterna táctica recargable con luz LED de alto rendimiento.', 580000, 20, '2025-04-11'),
+('SteriPEN Ultra', 'Purificador de agua UV portátil con batería recargable.', 400000, 15, '2025-04-09'),
+('Leatherman Tread Tempo', 'Multiherramienta inteligente con reloj analógico.', 1200000, 8, '2025-04-08');
+
+-- Insertar una venta
+INSERT INTO venta (cedula, id_usuario, total, total_con_descuento) VALUES
+(1044217661, 1, 2030000, 1930000);
+
+-- Insertar detalle de venta
+INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario, descuento_porcentaje, subtotal) VALUES
+(1, 1, 1, 1450000, 5.00, 1377500),
+(1, 3, 1, 580000, 5.00, 551000);
+
+-- Insertar pagopython setup_db.py
+
+INSERT INTO pago (id_venta, metodo_pago) VALUES
+(1, 'tarjeta');
+
+-- Insertar factura
+INSERT INTO factura (id_venta, numero_factura, archivo_pdf) VALUES
+(1, 'FACT-001', 'facturas/factura_001.pdf');
+
+-- Insertar historial de compra
+INSERT INTO historial_cliente (cedula, id_venta) VALUES
+(1044217661, 1);

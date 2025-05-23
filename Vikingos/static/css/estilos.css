@@ -1,0 +1,78 @@
+
+body {
+  background-color: #ff3806;
+}
+/* Fondo general con degradado */
+.fondo-login {
+  background: linear-gradient(90deg, #f87800 0%, #ff9a03fe 100%);
+}
+
+/* Fondo del lado derecho */
+.fondo-derecho {
+    height: 100%;
+    background: linear-gradient(120deg, #ff3806 0%, #ff8310 100%);
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Sombra para el contenedor principal */
+.sombra-login {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+}
+
+/* Botón naranja personalizado */
+.btn-orange, .btn-orange:focus {
+  background: #ff9100;
+  color: #fff;
+  border: none;
+  outline: none;
+}
+
+.btn-orange:hover {
+  background: #ff7b00;
+  color: #fff;
+}
+
+/* Texto naranja */
+.text-orange {
+  color: #ff8000 !important;
+}
+
+/* Ícono grande del lado derecho */
+.icono-grande {
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  display: inline-block;
+  padding: 20px;
+}
+
+/* Input con borde redondeado */
+.form-control {
+  border-radius: 10px;
+}
+
+/* Input-group para el ojito */
+.input-group .form-control,
+.input-group .btn {
+  border-radius: 10px !important;
+}
+
+/* Quitar borde azul al hacer click en el botón del ojito */
+.input-group .btn:focus {
+  box-shadow: none;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+  .row.w-75 {
+    width: 100% !important;
+    min-height: 80vh;
+    height: 100%;
+  }
+  .col-md-6 {
+    height: 100%;
+    padding: 2rem !important;
+  }
+}

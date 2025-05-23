@@ -1,0 +1,48 @@
+{% extends './base.html' %}
+
+{% block title%} Menu {% endblock %}
+
+{% block link %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css') }}">
+{% endblock %}
+
+{% block body %}
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center text-warning mb-4">usuarios</h2>
+    <table class="table table-bordered text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>id</th>
+          <th>nombre</th>
+          <th>correo</th>
+          <th>fecha creación</th>
+          <th>rol</th>
+          <th>acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in usuarios %}
+        <tr>
+          <td>{{ u.id_usuario }}</td>
+          <td>{{ u.nombre }}</td>
+          <td>{{ u.correo }}</td>
+          <td>{{ u.fecha_registro }}</td>
+          <td>{{ u.id_rol }}</td>
+          <td>
+            <button class="btn btn-success btn-sm">✔</button>
+            <button class="btn btn-danger btn-sm">✖</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-around mt-4">
+      <a href="/reguser"><button class="btn btn-outline-success">insertar</button></a>      
+      <a href="/acuser"><button class="btn btn-outline-warning">actualizar</button></a>
+      <a href="#"><button class="btn btn-outline-danger">borrar</button></a>
+    </div>
+  </div>
+</body>
+{% endblock %}
