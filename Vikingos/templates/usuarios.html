@@ -10,39 +10,89 @@
 <body>
   <div class="container mt-5">
     <h2 class="text-center text-warning mb-4">usuarios</h2>
-    <table class="table table-bordered text-center">
-      <thead class="table-dark">
-        <tr>
-          <th>id</th>
-          <th>nombre</th>
-          <th>correo</th>
-          <th>fecha creación</th>
-          <th>rol</th>
-          <th>acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for u in usuarios %}
-        <tr>
-          <td>{{ u.id_usuario }}</td>
-          <td>{{ u.nombre }}</td>
-          <td>{{ u.correo }}</td>
-          <td>{{ u.fecha_registro }}</td>
-          <td>{{ u.id_rol }}</td>
-          <td>
-            <button class="btn btn-success btn-sm">✔</button>
-            <button class="btn btn-danger btn-sm">✖</button>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <form id="usuariosForm" method="post">
+      <table class="table table-bordered text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>id</th>
+            <th>nombre</th>
+            <th>correo</th>
+            <th>fecha creación</th>
+            <th>rol</th>
+            <th>selecciona</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in usuarios %}
+          <tr>
+            <td>{{ u.id_usuario }}</td>
+            <td>{{ u.nombre }}</td>
+            <td>{{ u.correo }}</td>
+            <td>{{ u.fecha_registro }}</td>
+            <td>{{ u.id_rol }}</td>
+            <td>
+              <input type="radio" name="select" value="{{ u.id_usuario }}">
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-    <div class="d-flex justify-content-around mt-4">
-      <a href="/reguser"><button class="btn btn-outline-success">insertar</button></a>      
-      <a href="/acuser"><button class="btn btn-outline-warning">actualizar</button></a>
-      <a href="#"><button class="btn btn-outline-danger">borrar</button></a>
+      <div class="d-flex justify-content-around mt-4">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">insertar</button>
+        <button type="submit" formaction="/acuser" formmethod="post" class="btn btn-outline-warning">actualizar</button>
+        <button type="submit" formaction="/deluser" formmethod="post" class="btn btn-outline-danger">borrar</button>
+      </div>
+    </form>
+  </div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Regitro Usuarios</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/usuarios" method="post">
+          <input type="hidden" name="accion" value="insertar">
+          <label for="user">Usuario: </label>
+          <input type="text" id="user" name="usuario" title="Ingrese su usuario" placeholder="Escriba su usuario" required><br><br>
+
+          <label for="correo">Correo: </label>
+          <input type="email" id="correo" name="correo" title="Ingrese su correo" placeholder="Escriba su correo" required><br><br>
+
+          <label for="contraseña">Contraseña: </label>
+          <input type="password" id="contraseña" name="contraseña" title="Ingrese su contraseña" placeholder="Escriba su contraseña" required><br><br>
+
+          <label for="confirmar"> Confirmar Contraseña: </label>
+          <input type="password" id="confirmar" name="confirmar" title="Ingrese la misma contraseña" placeholder="Escriba la misma contraseña" required><br><br>
+
+          <label for="rol">Rol: </label>
+          <select name="rol" id="rol">
+            <option value="1" selected>Vendedor</option>
+            <option value="2">Admin</option>
+          </select>
+
+          <input type="submit" value="Enviar">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
     </div>
   </div>
+</div>
+  <script>
+    // Opcional: Validar que se seleccione un usuario antes de enviar el formulario
+    document.getElementById('usuariosForm').addEventListener('submit', function(e) {
+      if (!document.querySelector('input[name="select"]:checked')) {
+        e.preventDefault();
+        alert('Por favor selecciona un usuario.');
+      }
+    });
+  </script>
 </body>
 {% endblock %}

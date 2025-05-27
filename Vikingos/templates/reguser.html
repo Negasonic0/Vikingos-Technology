@@ -2,7 +2,7 @@
 
 {% block title%} Registrar Usuarios {% endblock %}
 
-{% block link %} <link rel="stylesheet" href="{{ url_for('static', filename='regis.css') }}"> {% endblock %}
+{% block link %} <link rel="stylesheet" href="static/css/regis.css"> {% endblock %}
  
 {% block body %}
 
@@ -31,16 +31,6 @@
     <input type="submit" value="Enviar">
   </form>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script>
-  document.getElementById('formulario').addEventListener('submit', function(event) {
-    setTimeout(() => {
-      this.reset();
-    }, 100); // Espera un poco para que el formulario se envíe antes de vaciarlo
-  });
-</script>
 {% endblock %}
 
 

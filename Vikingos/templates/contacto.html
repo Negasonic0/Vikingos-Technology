@@ -1,0 +1,104 @@
+{% extends './base.html' %}
+
+{% block title %} VIKINGOTIC | Únete a la aventura {% endblock %}
+
+{% block link %}
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/contacto.css" />
+{% endblock %}
+{% block body %} 
+    <div class="container">
+      <div class="left-panel">
+        <div class="logo-box">VIKINGO TECHNOLOGY</div>
+        <img src="/static/images/imagen.jpg" alt="Logo" class="logo" />
+        <h1>Únete a la aventura</h1>
+        <p>
+          Conecta con nosotros y descubre un mundo de posibilidades digitales
+        </p>
+        <div class="circle circle-top"></div>
+        <div class="circle circle-bottom"></div>
+      </div>
+      <div class="right-panel">
+        <form id="contactForm" novalidate>
+          <h2>CONTACTANOS</h2>
+          <p class="subtitle">Completa el formulario para comenzar</p>
+          <div class="form-group">
+            <label for="name">Nombre completo *</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Ingresa tu nombre completo"
+              required
+              pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]{2,}$"
+            />
+            <span class="error"></span>
+          </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico *</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="tu@email.com"
+              required
+            />
+            <span class="error"></span>
+          </div>
+          <div class="form-group">
+            <label for="phone">Número de contacto *</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="+1 (555) 123-4567"
+              required
+              pattern="^\+?\d{1,4}?[-.\s]?(\(?\d{1,3}?\)?[-.\s]?)*\d{1,4}[-.\s]?\d{1,9}$"
+            />
+            <span class="error"></span>
+          </div>
+          <div class="form-group">
+            <label for="subject">Asunto *</label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="¿En qué podemos ayudarte?"
+              required
+              minlength="3"
+            />
+            <span class="error"></span>
+          </div>
+          <div class="form-group">
+            <label for="message">Mensaje *</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="3"
+              placeholder="Cuéntanos más detalles sobre tu consulta o proyecto..."
+              required
+              minlength="10"
+            ></textarea>
+            <span class="error"></span>
+          </div>
+          <button type="submit" class="submit-btn">
+            <span>Enviar registro</span>
+          </button>
+          <p class="form-footer">
+            Al registrarte, aceptas nuestros términos de servicio y política de
+            privacidad.
+          </p>
+          <p id="formMsg"></p>
+        </form>
+      </div>
+    </div>
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        document.querySelector(".container").classList.add("show");
+      });
+    </script>
+    <script src="static/js/contacto.js"></script>
+{% endblock %}
