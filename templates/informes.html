@@ -1,0 +1,70 @@
+{% extends './base.html' %}
+
+{% block title %}Informes productos{% endblock %}
+
+{% block link %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/informes.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="panel-naranja">
+        <a class="btn-volver" href="{{ url_for('Menu')}}">Volver al menú</a>
+        <h1>Informe de Productos</h1>
+        <form class="form-busqueda" method="get">
+            <input type="text" name="nombre" placeholder="Buscar por nombre de producto" value="{{ request.args.get('nombre', '') }}">
+            <input type="date" name="fecha" value="{{ request.args.get('fecha', '') }}">
+            <button class="btn" type="submit">Buscar</button>
+            <button class="btn" type="button">PDF</button>
+        </form>
+        <table class="tabla-historial">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th>Fecha de ingreso</th>
+                </tr>
+            </thead>
+            <tbody>
+    {% if productos is defined %}
+        {% if productos|length > 0 %}
+            {% for p in productos %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.nombre }}</td>
+                <td>{{ p.categoria }}</td>
+                <td>{{ p.stock }}</td>
+                <td>{{ p.precio }}</td>
+                <td>{{ p.fecha }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6">No se encontraron productos.</td>
+            </tr>
+        {% endif %}
+    {% else %}
+        <!-- Ejemplos estáticos aquí -->
+        <tr>
+            <td>201</td>
+            <td>Garmin Instinct 2</td>
+            <td>Relojes</td>
+            <td>15</td>
+            <td>$1,450,000</td>
+            <td>2025-06-10</td>
+        </tr>
+        <tr>
+            <td>202</td>
+            <td>Fenix PD36R Pro</td>
+            <td>Linternas</td>
+            <td>8</td>
+            <td>$580,000</td>
+            <td>2025-06-12</td>
+        </tr>
+    {% endif %}
+</tbody>
+        </table>
+    </div>
+{% endblock %}

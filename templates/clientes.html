@@ -1,0 +1,284 @@
+{% extends './base.html' %} 
+
+{% block title %} Clientes {% endblock %} 
+
+{% block link %}
+<!-- Fuente personalizada desde Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Orbitron:400,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- Hoja de estilos específica para el módulo de clientes -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/registros.css') }}"
+/>
+{% endblock %}
+
+{% block body %}
+<!-- Contenedor principal -->
+<div class="usuarios-container mt-5">
+    <a href="/" class="btn volver">Volver al menú</a>
+    <h2 class="titulo">Clientes</h2>
+
+    <div class="filtros-usuarios">
+      <form method="get" action="{{ url_for('gestionar_clientes') }}">
+        <input type="text" name="buscar" placeholder="Buscar por nombre o cédula" value="{{ request.args.get('buscar', '') }}">
+        <select name="estado">
+          <option value="">Todos</option>
+          <option value="activo" {% if request.args.get('estado') == 'activo' %}selected{% endif %}>Activo</option>
+          <option value="inactivo" {% if request.args.get('estado') == 'inactivo' %}selected{% endif %}>Inactivo</option>
+        </select>
+        <button type="submit">Buscar</button>
+      </form>
+    </div>
+
+    <div class="pagination justify-content-center mt-4">
+      {% if clientes.has_prev %}
+        <a href="{{ url_for('gestionar_clientes', pagina=clientes.prev_num) }}" class="btn btn-outline-secondary me-2">Anterior</a>
+      {% endif %}
+
+      <span class="fw-bold">Página {{ clientes.page }} de {{ clientes.pages }}</span>
+
+      {% if clientes.has_next %}
+        <a href="{{ url_for('gestionar_clientes', pagina=clientes.next_num) }}" class="btn btn-outline-secondary ms-2">Siguiente</a>
+      {% endif %}
+    </div>
+
+    <form id="usuariosForm" method="post">
+      <div class="scrollable-contenedor">
+        <table class="usuarios-table">
+          <thead>
+            {% if usuario.id_rol == 1 %}
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Cédula</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Fecha Creación</th>
+              <th>Estado</th>
+              <th>Selecciona</th>
+            </tr>
+            {% else %}
+            <tr>
+              <th>Nombre</th>
+              <th>Cédula</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+              <th>Selecciona</th>
+            </tr>
+            {% endif %}
+          </thead>
+          <tbody>
+            {% for c in clientes.items %}
+              {% if usuario.id_rol == 1 %}
+              <tr>
+                <td>{{ c.id_cliente }}</td>
+                <td>{{ c.nombre_completo }}</td>
+                <td>{{ c.cedula }}</td>
+                <td>{{ c.correo }}</td>
+                <td>{{ c.telefono }}</td>
+                <td>{{ c.fecha_registro }}</td>
+                <td>{{ c.estado }}</td>
+                <td>
+                  <input type="radio" name="cliente_seleccionado" value="{{ c.id_cliente }}" data-cedula="{{ c.cedula }}" data-nombre="{{ c.nombre_completo }}" data-correo="{{ c.correo }}" data-telefono="{{ c.telefono }}" />
+                </td>
+              </tr>
+              {% elif c.estado == 'activo' %}
+              <tr>
+                <td>{{ c.nombre_completo }}</td>
+                <td>{{ c.cedula }}</td>
+                <td>{{ c.correo }}</td>
+                <td>{{ c.telefono }}</td>
+                <td>
+                  <input type="radio" name="cliente_seleccionado" value="{{ c.id_cliente }}" data-cedula="{{ c.cedula }}" data-nombre="{{ c.nombre_completo }}" data-correo="{{ c.correo }}" data-telefono="{{ c.telefono }}" />
+                </td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if not clientes %}
+      <p class="no-usuarios">No hay clientes registrados.</p>
+      {% endif %}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="container mt-3">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+    </form>
+
+    <div class="botones-flotantes">
+      <button type="button" class="btn insertar" onclick="abrirModal('modalInsertar')">Insertar</button>
+      <button type="button" class="btn actualizar" onclick="abrirModal('modalActualizar')">Actualizar</button>
+      {% if usuario.id_rol == 1 %}
+      <button type="button" id="btnActivarDesactivar" class="btn" onclick="abrirModalActivarDesactivar()">Activar/Desactivar</button>
+      {% endif %}
+    </div>
+</div>
+
+<div class="imagen-footer">
+  <img src="/static/images/icono-logo.ico" alt="Logo" class="logo" />
+</div>
+<!-- Modal para insertar cliente -->
+<div class="modal" id="modalInsertar">
+  <div class="modal-content">
+    <h3>Insertar Cliente</h3>
+    <form method="post">
+      <input type="hidden" name="accion" value="insertar">
+      <input type="text" name="nombre" placeholder="Nombre completo" required>
+      <input type="text" name="cedula" placeholder="Cédula" maxlength="10" required>
+      <input type="email" name="correo" placeholder="Correo electrónico" required>
+      <input type="text" name="telefono" placeholder="Teléfono"  maxlength="10" required>
+      <div class="botones">
+        <button type="submit" class="btn insertar">Guardar</button>
+        <button type="button" class="btn actualizar" onclick="cerrarModal('modalInsertar')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal para actualizar cliente -->
+<div class="modal" id="modalActualizar">
+  <div class="modal-content">
+    <h3>Actualizar Cliente</h3>
+    <form method="post">
+      <input type="hidden" name="accion" value="actualizar">
+      <input type="hidden" name="cliente_seleccionado" id="clientes_actualizar">
+      <input type="text" name="nombre" placeholder="Nuevo nombre" required>
+      <input type="email" name="correo" placeholder="Nuevo correo" required>
+      <input type="text" name="telefono" placeholder="Nuevo teléfono" maxlength="10" required>
+      <div class="botones">
+        <button type="submit" class="btn actualizar">Actualizar</button>
+        <button type="button" class="btn borrar" onclick="cerrarModal('modalActualizar')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Activar/Desactivar Cliente -->
+<div class="modal" id="modalActivarDesactivar">
+  <div class="modal-content">
+    <h3 id="tituloModalActivarDesactivar"></h3>
+    <form method="post">
+      <input type="hidden" name="accion" id="accionActivarDesactivar" />
+      <input type="hidden" name="cliente_seleccionado" id="clientes_activar_desactivar" />
+      <div class="botones">
+        <button type="submit" id="btnConfirmarActivarDesactivar" class="btn"></button>
+        <button type="button" class="btn actualizar" onclick="cerrarModal('modalActivarDesactivar')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- JS -->
+<script>
+  function abrirModal(id) {
+    const selectedClien = document.querySelector('input[name="cliente_seleccionado"]:checked');
+    if ((id !== 'modalInsertar') && !selectedClien) {
+      alert('Por favor selecciona un cliente.');
+      return;
+    }
+    if (id === 'modalActualizar') {
+      document.getElementById('clientes_actualizar').value = selectedClien.value;
+      document.querySelector('#modalActualizar input[name="nombre"]').value = selectedClien.getAttribute('data-nombre');
+      document.querySelector('#modalActualizar input[name="correo"]').value = selectedClien.getAttribute('data-correo');
+      document.querySelector('#modalActualizar input[name="telefono"]').value = selectedClien.getAttribute('data-telefono');
+    }
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.add('show');
+    }
+  }
+
+  function abrirModalActivarDesactivar() {
+    const selectedCliente = document.querySelector('input[name="cliente_seleccionado"]:checked');
+    if (!selectedCliente) {
+      alert("Por favor selecciona un cliente.");
+      return;
+    }
+    const row = selectedCliente.closest("tr");
+    const estadoCliente = row.cells[6].textContent.trim().toLowerCase();
+    const modal = document.getElementById("modalActivarDesactivar");
+    const titulo = document.getElementById("tituloModalActivarDesactivar");
+    const accion = document.getElementById("accionActivarDesactivar");
+    const clienteId = document.getElementById("clientes_activar_desactivar");
+    const btnConfirmar = document.getElementById("btnConfirmarActivarDesactivar");
+
+    clienteId.value = selectedCliente.value;
+    if (estadoCliente === "activo") {
+      titulo.textContent = "¿Deseas desactivar este cliente?";
+      accion.value = "desactivar";
+      btnConfirmar.textContent = "Sí, desactivar";
+      btnConfirmar.className = "btn desactivar";
+    } else {
+      titulo.textContent = "¿Deseas activar este cliente?";
+      accion.value = "activar";
+      btnConfirmar.textContent = "Sí, activar";
+      btnConfirmar.className = "btn activar";
+    }
+    modal.classList.add("show");
+  }
+  // Función para cerrar el modal
+  function cerrarModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.remove("show");
+    }
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("loaded");
+
+    // Oculta automáticamente las alertas después de 5 segundos
+    setTimeout(() => {
+      document.querySelectorAll('.alert').forEach(alert => {
+        alert.classList.remove('show');
+        alert.classList.add('hide');
+      });
+    }, 5000);
+  });
+</script>
+
+{% if usuario.id_rol == 1 %}
+<script>
+  function filtrarUsuarios() {
+    const input = document.getElementById("buscarUsuario").value.toLowerCase();
+    const estado = document.getElementById("filtroEstado").value;
+    const rows = document.querySelectorAll(".usuarios-table tbody tr");
+    rows.forEach((row) => {
+      const nombre = row.cells[1].textContent.toLowerCase();
+      const cedula = row.cells[2].textContent.toLowerCase();
+      const estadoCliente = row.cells[6].textContent.toLowerCase();
+      const nombreCoincide = nombre.includes(input) || cedula.includes(input);
+      const estadoCoincide = estado === "" || estadoCliente === estado;
+      row.style.display = (nombreCoincide && estadoCoincide) ? "" : "none";
+    });
+  }
+</script>
+{% else %}
+<script>
+  function filtrarUsuarios() {
+    const input = document.getElementById("buscarUsuario").value.toLowerCase();
+    const rows = document.querySelectorAll(".usuarios-table tbody tr");
+    rows.forEach((row) => {
+      const nombre = row.cells[0].textContent.toLowerCase();
+      const cedula = row.cells[1].textContent.toLowerCase();
+      const nombreCoincide = nombre.includes(input) || cedula.includes(input);
+      row.style.display = nombreCoincide ? "" : "none";
+    });
+  }
+</script>
+{% endif %}
+{% endblock %}

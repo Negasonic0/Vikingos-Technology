@@ -1,0 +1,43 @@
+{% extends './base.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block link %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container-login">
+  <div class="logo-bg">
+    <img src="{{ url_for('static', filename='images/icono-logo.ico') }}" alt="Logo fondo">
+  </div>
+  <div class="login-header text-center">
+    <h1 class="login-title">Vikingo Technology</h1>
+    <div class="login-barra"></div>
+    <div class="login-subtitle">Innovación y Resistencia para Aventuras Extremas</div>
+  </div>
+  <form method="POST" class="login-form">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="container mt-2">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <input type="email" class="form-control mb-3" placeholder="Correo electrónico" name="correo" required>
+    <div class="password-container" style="position:relative;">
+      <input type="password" class="form-control mb-4" placeholder="Contraseña" name="contraseña" id="password-input" required>
+      <span class="toggle-password" id="toggle-password" style="position:absolute;top:50%;right:18px;transform:translateY(-50%);cursor:pointer;font-size:1.3rem;color:#888;">
+        👁️
+      </span>
+    </div>
+    <button type="submit" class="btn-orange w-100 py-3 mt-2"><strong>INGRESAR</strong></button>
+  </form>
+</div>
+<script src="{{ url_for('static', filename='js/login.js') }}" defer></script>
+{% endblock %}

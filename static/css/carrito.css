@@ -1,0 +1,550 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+/* Fuente global */
+* {
+    font-family: 'Orbitron', Arial, sans-serif !important;
+}
+
+/* Fondo de naturaleza para toda la página */
+body {
+    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    font-family: 'Orbitron', Arial, sans-serif;
+    background: linear-gradient(90deg, #2b2b2b 0%, #2b2b2b 100%);
+    text-transform: capitalize;
+}
+
+/* Colores de texto */
+.text-orange {
+    color: #ff8000 !important;
+}
+.text-white {
+    color: #fff !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* Fondo blanco y sombra para el navbar */
+.navbar, .navbar.bg-white, .navbar-light {
+    background: #fff !important;
+    color: #222 !important;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
+    border-radius: 0 0 12px 12px;
+}
+
+/* Color de los enlaces y marca */
+.navbar .nav-link, .navbar .navbar-brand {
+    color: #222 !important;
+    transition: color 0.2s;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+/* Hover en enlaces */
+.navbar .nav-link:hover, .navbar .navbar-brand:hover {
+    color: #ff8000 !important;
+}
+
+/* === REGLAS PARA EL BOTÓN DE INICIO DE SESIÓN/USUARIO EN EL NAVBAR (.btn-orange) === */
+/* Estilo base del botón: fondo blanco, borde naranja, texto oscuro (como en la imagen) */
+.btn-orange {
+    background: #fff;
+    color: #222 !important; /* Texto oscuro por defecto (como en la imagen) */
+    border: 2px solid #ff8000; /* Borde naranja */
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out; /* Transición suave para todos los cambios */
+}
+
+/* Estilo al pasar el cursor (HOVER): el texto cambia a naranja */
+.btn-orange:hover {
+    color: #ff8000 !important; /* El texto se vuelve naranja al hacer hover */
+    transform: translateY(-2px); /* Ligero levantamiento */
+    box-shadow: 0 4px 12px rgba(255,128,0,0.2); /* Sombra más pronunciada */
+}
+
+/* Estilo al hacer clic o cuando el botón tiene el foco (FOCUS) o cuando el menú está abierto (.show) */
+/* El texto NO cambia a naranja aquí. Mantiene el color oscuro y una sombra para indicar actividad. */
+.btn-orange:focus,
+.btn-orange.show { /* Cuando el botón tiene foco o el dropdown está abierto */
+    background: #fff; /* Mantiene el fondo blanco */
+    color: #222 !important; /* Mantiene el texto oscuro (como en la imagen con el menú abierto) */
+    border-color: #ff8000; /* Mantiene el borde naranja */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15) inset; /* Sombra sutil interna para dar sensación de "presionado" */
+    transform: translateY(0); /* No hay levantamiento en este estado */
+    outline: none; /* Elimina el contorno de foco predeterminado del navegador */
+}
+
+/* Si el botón es hover ESEPCÍFICAMENTE mientras el menú está abierto (show), el texto sí se pone naranja */
+.btn-orange.show:hover {
+    color: #ff8000 !important; /* El texto se vuelve naranja si se hace hover con el menú abierto */
+    transform: translateY(-2px); /* Ligero levantamiento */
+    box-shadow: 0 4px 12px rgba(255,128,0,0.2); /* Sombra más pronunciada */
+}
+/* === FIN DE REGLAS PARA EL BOTÓN DE INICIO DE SESIÓN/USUARIO === */
+
+
+/* Botón naranja para el resto de la página */
+.btn-main-orange {
+    background: #ff8000;
+    color: #fff !important;
+    border: none;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    padding: 0.5rem 1.5rem;
+    font-weight: 400 !important;
+    box-shadow: none !important;
+    width: auto;
+    transition: none !important;    /* Quita la animación */
+}
+.btn-main-orange:hover {
+    background: #ffffff;
+    color: #ff8000 !important;
+    border: 2px solid #ff8000;
+    transition: none !important;
+    box-shadow: none !important;
+}
+
+/* Solo en móvil el botón ocupa el 100% */
+@media (max-width: 991.98px) {
+    .btn-main-orange {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}
+
+/* Ícono de usuario alineado */
+#btn-login span {
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+
+.btn-main-orange,
+.btn-outline-secondary {
+    padding: 0.5rem 1rem;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+/* Hover naranja para los botones outline secundarios de la sección de filtros */
+.btn-outline-secondary.fw-bold.text-white:hover,
+.btn-outline-secondary.fw-bold.text-white:focus {
+    background-color: #ff8000 !important;
+    color: #fff !important;
+    border-color: #ff8000 !important;
+}
+
+/* Cambia el color del placeholder a naranja cuando el input está enfocado */
+.input-group input:focus::placeholder {
+    color: #ff8000;
+    opacity: 1;
+}
+
+/* Animación de levantar al hacer hover */
+.btn-outline-secondary,
+.btn-todos-productos {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-outline-secondary:hover,
+.btn-todos-productos:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 6px 18px #ff800033;
+}
+
+@media (max-width: 991.98px) {
+    .btn-outline-secondary,
+    .btn-todos-productos {
+        width: 100%;
+    }
+}
+
+/* Cambia el ancho aquí según lo que desees */
+.input-group.input-group-sm.w-auto .form-control {
+    width: 70px;
+    min-width: 50px;
+    max-width: 120px;
+    font-size: 1rem;
+    height: 2rem;
+    padding: 0.1rem 0.2rem;
+    text-align: center;
+    transition: width 0.2s;
+}
+
+@media (max-width: 575.98px) {
+    .input-group.input-group-sm.w-auto .form-control {
+        width: 100px !important;
+        min-width: 50px;
+        max-width: 120px;
+        font-size: 1rem;
+        padding: 0.1rem 0.1rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .input-group.input-group-sm.w-auto .form-control {
+        width: 100px !important;
+        font-size: 1.1rem;
+    }
+}
+
+.input-group.input-group-sm.w-auto .btn-outline-secondary {
+    font-size: 1.1rem;
+    padding: 0.1rem 0.7rem;
+    min-width: 2rem;
+    min-height: 2rem;
+    transition: font-size 0.2s, padding 0.2s;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 575.98px) {
+    .input-group.input-group-sm.w-auto .btn-outline-secondary {
+        font-size: 1rem;
+        padding: 0.1rem 0.5rem;
+        min-width: 1.5rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .input-group.input-group-sm.w-auto .btn-outline-secondary {
+        font-size: 1.25rem;
+        padding: 0.1rem 1rem;
+        min-width: 2.5rem;
+    }
+}
+
+.input-group.input-group-sm.w-auto .btn-outline-secondary,
+.input-group.input-group-sm.w-auto .form-control {
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: center;
+}
+
+.input-group.input-group-sm.w-auto .btn-outline-secondary {
+    max-width: none;
+}
+
+/* Botón Agregar al Carrito más grande */
+.btn-main-orange {
+    font-size: 1.15rem;
+    padding: 0.7rem 1.6rem;
+}
+
+.btn-add-cart {
+   font-size: 1rem;
+    padding: 0.4rem 1rem;
+    border-radius: 10px;
+    height: 2.2rem;
+    min-width: 0;
+    gap: 0.4rem;
+    transition: font-size 0.2s, padding 0.2s;
+}
+
+@media (max-width: 575.98px) {
+    .btn-add-cart {
+        font-size: 0.92rem;
+        padding: 0.3rem 0.5rem;
+        height: 2rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .btn-add-cart {
+        font-size: 1.15rem;
+        padding: 0.5rem 1.5rem;
+        height: 2.4rem;
+    }
+}
+@media (max-width: 767.98px) {
+    .btn-add-cart {
+        width: 100% !important;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* Animación de entrada solo para las tarjetas de producto */
+.card {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+    animation: fadeInUp 0.7s cubic-bezier(.23,1.02,.32,1) forwards;
+    transition: transform 0.25s cubic-bezier(.23,1.02,.32,1), box-shadow 0.2s;
+    overflow: hidden;
+}
+
+/* Efecto al hacer hover en la tarjeta */
+.card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px 0 rgba(255,128,0,0.15);
+}
+
+/* Keyframes para la animación de entrada */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.card-img-top {
+    transition: transform 0.4s cubic-bezier(.23,1.02,.32,1), box-shadow 0.3s;
+    max-height: 220px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    margin: 0 auto;
+    display: block;
+    background: #fff;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.08) translateY(-8px);
+    box-shadow: 0 8px 32px 0 rgba(255,128,0,0.18);
+}
+
+/* Responsividad inversa para el campo de cantidad */
+.input-group.input-group-sm.w-auto .form-control {
+    width: 150px;
+    height: 40px;
+    min-width: 50px;
+    max-width: 300px;
+    transition: width 0.2s, box-shadow 0.2s;
+}
+
+/* Pantallas medianas */
+@media (max-width: 991.98px) {
+    .input-group.input-group-sm.w-auto .form-control {
+        width: 90px;
+    }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 767.98px) {
+    .input-group.input-group-sm.w-auto .form-control {
+        width: 300px;
+    }
+}
+
+/* Pantallas muy pequeñas */
+@media (max-width: 575.98px) {
+    .input-group.input-group-sm.w-auto .form-control {
+        width: 300px !important;
+    }
+}
+
+/* Animación para los botones de cantidad */
+.input-group.input-group-sm.w-auto .btn-outline-secondary {
+    transition: background 0.2s, color 0.2s, transform 0.18s, box-shadow 0.18s;
+    border-radius: 8px !important;
+}
+.input-group.input-group-sm.w-auto .btn-outline-secondary:hover,
+.input-group.input-group-sm.w-auto .btn-outline-secondary:focus {
+    background: #ff8000 !important;
+    color: #fff !important;
+    transform: scale(1.12);
+    box-shadow: 0 2px 8px #ff800033;
+}
+
+/* Animación para el botón de añadir al carrito */
+.btn-add-cart {
+    transition: background 0.2s, color 0.2s, transform 0.18s, box-shadow 0.18s;
+}
+
+.btn-add-cart:hover,
+.btn-add-cart:focus {
+    background: #fff !important;
+    color: #ff8000 !important;
+    border: 2px solid #ff8000;
+    transform: scale(1.04) translateY(-2px);
+    box-shadow: 0 4px 16px #ff800033;
+}
+
+/* Animación y color para opciones del menú desplegable */
+.dropdown-menu .dropdown-item {
+    transition: color 0.2s, background 0.2s;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    color: #ff8000 !important;
+    background-color: #fff3e0 !important;
+}
+
+/* --- BOTONES DEL MODAL DEL CARRITO --- */
+#modalCarritoLleno .modal-footer .d-flex {
+  align-items: stretch !important;
+  flex-direction: column;
+}
+@media (min-width: 576px) {
+  #modalCarritoLleno .modal-footer .d-flex {
+    flex-direction: row;
+  }
+}
+#modalCarritoLleno .modal-footer .btn {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px !important;
+  font-size: 0.92rem;
+  padding: 0.2rem 0.3rem;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0 !important;
+}
+#modalCarritoLleno .modal-footer .btn + .btn {
+  margin-top: 0.5rem;
+}
+@media (min-width: 576px) {
+  #modalCarritoLleno .modal-footer .btn + .btn {
+    margin-top: 0;
+    margin-left: 0.5rem;
+  }
+}
+
+/* Alineación vertical de precios y botones en las tarjetas de producto */
+.card.h-100 {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body > .d-flex.flex-column.align-items-center.gap-2 {
+    margin-top: auto;
+}
+
+/* Estilos para modal de menú principal con gradiente y colores de marca */
+#menuPrincipalModal .modal-content {
+  background: linear-gradient(135deg, #ff8000 0%, #db0202ef 50%, #c43004 100%);
+  color: #fff;
+  border-radius: 18px;
+  border: none;
+}
+
+#menuPrincipalModal .modal-title {
+  color: #fff;
+  font-weight: bold;
+}
+
+#menuPrincipalModal .btn-close {
+  filter: invert(1);
+}
+
+#menuPrincipalModal .card {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid #ff8000;
+  border-radius: 14px;
+  transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+  color: #fff;
+}
+
+#menuPrincipalModal .card:hover {
+  box-shadow: 0 0 0 3px #ff8000, 0 4px 24px 0 rgba(0,0,0,0.18);
+  border-color: #fff;
+  background: rgba(255,128,0,0.18);
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+}
+
+#menuPrincipalModal .card-title {
+  color: #fff !important;
+  font-weight: bold;
+}
+
+#menuPrincipalModal .card-text {
+  color: #fff;
+  opacity: 0.9;
+}
+
+#menuPrincipalModal a.text-decoration-none {
+  text-decoration: none !important;
+}
+
+#menuPrincipalModal .row.g-3 > [class^="col-"] {
+  margin-bottom: 0.5rem;
+}
+
+/* Estilos para el modal de cerrar sesión */
+#logoutModal .modal-content {
+  background: linear-gradient(135deg, #ff8000 0%, #db0202ef 100%);
+  color: #fff;
+  border-radius: 16px;
+  border: none;
+}
+
+#logoutModal .modal-title {
+  color: #fff;
+  font-weight: bold;
+}
+
+#logoutModal .btn-close {
+  filter: invert(1);
+}
+
+#logoutModal .modal-footer {
+  border-top: none;
+}
+
+#logoutModal .btn-light {
+  background: #fff;
+  color: #ff8000;
+  border: 2px solid #ff8000;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+#logoutModal .btn-light:hover {
+  background: #ff8000;
+  color: #fff;
+}
+
+#logoutModal .btn-dark {
+  background: #222;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+#logoutModal .btn-dark:hover {
+  background: #ff8000;
+  color: #fff;
+}
+
+/* Agrega esto en tu archivo carrito.css */
+#btnCarritoHeader {
+    display: none !important;
+}
+
+/* Agranda el botón flotante del carrito */
+#btnCarritoFlotante {
+    font-size: 1.35rem;
+    padding: 1.1rem 2.2rem;
+    border-radius: 16px;
+    min-width: 170px;
+    height: 64px;
+    box-shadow: 0 6px 24px rgba(255,128,0,0.18);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+#btnCarritoFlotante i {
+    font-size: 2rem;
+}

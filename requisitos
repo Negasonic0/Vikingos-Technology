@@ -1,0 +1,75 @@
+2. Sistema de Gestión de Ventas
+
+############################ FUNCINALES ##################################
+
+Descripción:
+Este sistema está diseñado para realizar el seguimiento de ventas en una tienda o empresa. Los usuarios pueden registrar ventas, gestionar clientes, ver el historial de compras y generar informes de las ventas.
+
+Funcionalidades Clave:
+Pantalla de inicio de sesión: Autenticación de usuarios.
+
+Gestión de clientes:
+
+Crear, editar y eliminar clientes con detalles como nombre, correo electrónico, teléfono, etc.
+
+Historial de compras de cada cliente.
+
+Procesamiento de ventas:
+
+Registrar productos vendidos (añadir productos al carrito de venta).
+
+Registrar el tipo de pago (efectivo, tarjeta de crédito, transferencia).
+
+Aplicar descuentos si es necesario.
+
+Generación de facturas:
+
+Crear facturas con formato predeterminado, incluyendo detalles de venta y cliente.
+
+Enviar facturas por correo electrónico en formato PDF.
+
+Informes de ventas:
+
+Generar informes por rango de fechas de ventas realizadas.
+
+Informe de ventas por producto o por cliente.
+
+Tecnologías y Herramientas:
+Interfaz de usuario: Tkinter o PyQt.
+
+Base de datos: SQLite o PostgreSQL.
+
+Backend: SQLAlchemy.
+
+Generación de PDF: ReportLab o FPDF.
+
+Consideraciones adicionales:
+Rendimiento: El sistema debe manejar varias ventas simultáneas sin afectarse el rendimiento.
+
+Seguridad: Protección de datos sensibles (como información de tarjetas) y autenticación robusta.
+
+################## NO FUNCIONALES ###########################
+
+Aquí tienes una lista organizada de las peticiones mencionadas sobre requerimientos no funcionales, basadas en el audio proporcionado 
+
+Paleta de colores: Se debe usar toda la paleta de colores del naranja en sus diferentes tonalidades, incluyendo el blanco y el gris 
+
+Iconos: Se deben utilizar iconos para todo 
+
+Nombre del software: El nombre debe ser creativo, significativo y relacionado con algo creativo  
+
+Alineación de pantallas: En lo posible, se debe tratar de que las pantallas estén bien alineadas  
+
+Formato PDF: Los archivos en formato PDF deben tener por lo menos el icono de la empresa 
+
+Logotipo de la empresa: Se debe crear un logo para la empresa y colocarlo, por ejemplo, en todas las pantallas 
+
+Detalles de las pantallas: Se debe prestar mucha atención a los detalles de cada pantalla, como cada checkbox, text box y label 
+
+Formato de texto: La primera letra de las palabras debe ser en mayúscula y el resto en minúscula 
+
+Alineación y tamaño de elementos: Los text boxes deben estar alineados, y no deben tener diferentes tamaños 
+
+Imagen opcional: Si es posible, se podría colocar alguna imagen en las pantallas 
+
+El audio también menciona la importancia de revisar cada pantalla, checkbox, text box y label para asegurar la correcta presentación1 . Se enfatiza que todos los detalles son importante

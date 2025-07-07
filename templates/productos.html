@@ -1,0 +1,297 @@
+{% extends './base.html' %}
+
+{% block title %} Productos {% endblock %}
+
+{% block link %}
+<!-- Fuente personalizada desde Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Orbitron:400,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- Hoja de estilos específica para el módulo de productos -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/registros.css') }}"
+/>
+{% endblock %}
+
+{% block body %}
+
+<div class="usuarios-container mt-5">
+  <a href="/" class="btn volver">Volver al menú</a>
+  <h2 class="titulo">Productos</h2>
+
+  <div class="filtros-usuarios">
+    <form method="get" action="{{ url_for('gestionar_productos') }}">
+      <input type="text" name="buscar" placeholder="Buscar por nombre o cédula" value="{{ request.args.get('buscar', '') }}">
+      <select name="estado">
+        <option value="">Todos</option>
+        <option value="activo" {% if request.args.get('estado') == 'activo' %}selected{% endif %}>Activo</option>
+        <option value="inactivo" {% if request.args.get('estado') == 'inactivo' %}selected{% endif %}>Inactivo</option>
+      </select>
+      <button type="submit">Buscar</button>
+    </form>
+  </div>
+
+  <div class="pagination justify-content-center mt-4">
+      {% if productos.has_prev %}
+        <a href="{{ url_for('gestionar_productos', pagina=productos.prev_num) }}" class="btn btn-outline-secondary me-2">Anterior</a>
+      {% endif %}
+
+      <span class="fw-bold">Página {{ productos.page }} de {{ productos.pages }}</span>
+
+      {% if productos.has_next %}
+        <a href="{{ url_for('gestionar_productos', pagina=productos.next_num) }}" class="btn btn-outline-secondary ms-2">Siguiente</a>
+      {% endif %}
+  </div>
+
+  <!-- FORMULARIO CON TABLA EN CONTENEDOR SCROLL -->
+  <form id="productosForm" method="post">
+    <div class="scrollable-contenedor">
+      <table class="usuarios-table">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>nombre</th>
+            <th>descripcion</th>
+            <th>precio</th>
+            <th>stock</th>
+            <th>fecha ingreso</th>
+            <th>fecha creación</th>
+            <th>estado</th>
+            <th>selecciona</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in productos.items %}
+          <tr>
+            <td>{{ p.id_producto }}</td>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.descripcion }}</td>
+            <td>{{ p.precio | currency_format }}</td>
+            <td>{{ p.stock}}</td>
+            <td>{{ p.fecha_ingreso }}</td>
+            <td>{{ p.fecha_registro }}</td>
+            <td>{{ p.estado }}</td>
+            <td>
+              <input type="radio" name="producto_seleccionado"
+                     value="{{ p.id_producto }}"
+                     data-descripcion="{{ p.descripcion }}"
+                     data-nombre="{{ p.nombre }}"
+                     data-precio="{{ p.precio | int }}"
+                     data-stock="{{ p.stock }}"
+                     data-fecha="{{ p.fecha_ingreso }}">
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  {% if not productos %}
+  <p class="no-usuarios">No hay productos registrados.</p>
+  {% endif %}
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container mt-3">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- BOTONES FUERA DEL FORMULARIO -->
+  <div class="botones-flotantes">
+    <button
+      type="button"
+      class="btn insertar"
+      onclick="abrirModal('modalInsertar')"
+    >
+      Insertar
+    </button>
+    <button
+      type="button"
+      class="btn actualizar"
+      onclick="abrirModal('modalActualizar')"
+    >
+      Actualizar
+    </button>
+    <button
+      type="button"
+      id="btnActivarDesactivarProducto"
+      class="btn"
+      onclick="abrirModalActivarDesactivarProducto()"
+    >
+      Activar/Desactivar
+    </button>
+  </div>
+</div>
+
+<!-- ================= MODALES SIN CAMBIOS ================= -->
+
+<!-- Modal para insertar nuevo producto -->
+<div class="modal" id="modalInsertar">
+  <div class="modal-content">
+    <h3>Insertar productos</h3>
+    <form method="post">
+      <input type="hidden" name="accion" value="insertar">
+      <input type="text" name="nombre" placeholder="Nombre" required>
+      <input type="text" name="descripcion" placeholder="Descripcion" required>
+      <input type="text" name="image" placeholder="Imagen">
+      <input type="number" name="precio" placeholder="Precio unitario" required>
+      <input type="number" name="stock" maxlength="4" placeholder="cantidad" required>
+      <input type="date" name="fecha_ingreso" placeholder="Fecha de ingreso" required>
+      <div class="botones">
+        <button type="submit" class="btn insertar">Guardar</button>
+        <button type="button" class="btn actualizar" onclick="cerrarModal('modalInsertar')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal para actualizar un producto existente -->
+<div class="modal" id="modalActualizar">
+  <div class="modal-content">
+    <h3>Actualizar productos</h3>
+    <form method="post">
+      <input type="hidden" name="accion" value="actualizar">
+      <input type="hidden" name="producto_seleccionado" id="producto_actualizar">
+      <input type="text" name="nombre" placeholder="Nuevo nombre" required>
+      <input type="text" name="descripcion" placeholder="Nueva descripción" required>
+      <input type="text" name="image" placeholder="Nueva imagen (no obligatoria)">
+      <input type="number" name="precio" placeholder="Nuevo precio" required>
+      <input type="number" name="stock" maxlength="4" placeholder="Nueva cantidad" required>
+      <input type="date" name="fecha_ingreso" placeholder="Nueva fecha de ingreso" required>
+      <div class="botones">
+        <button type="submit" class="btn actualizar">Actualizar</button>
+        <button type="button" class="btn borrar" onclick="cerrarModal('modalActualizar')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Activar/Desactivar Producto -->
+<div class="modal" id="modalActivarDesactivarProducto">
+  <div class="modal-content">
+    <h3 id="tituloModalActivarDesactivarProducto"></h3>
+    <form method="post">
+      <input type="hidden" name="accion" id="accionActivarDesactivarProducto" />
+      <input type="hidden" name="producto_seleccionado" id="producto_activar_desactivar" />
+      <div class="botones">
+        <button
+          type="submit"
+          id="btnConfirmarActivarDesactivarProducto"
+          class="btn"
+        ></button>
+        <button
+          type="button"
+          class="btn actualizar"
+          onclick="cerrarModal('modalActivarDesactivarProducto')"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= JAVASCRIPT FINAL ================= -->
+
+<script>
+  function abrirModal(id) {
+    const selected = document.querySelector('input[name="producto_seleccionado"]:checked');
+    if (id !== "modalInsertar" && !selected) {
+      alert("Por favor selecciona un producto.");
+      return;
+    }
+
+    if (id === 'modalActualizar') {
+      document.getElementById('producto_actualizar').value = selected.value;
+
+      const nombre = selected.getAttribute('data-nombre');
+      const precio = selected.getAttribute('data-precio');
+      const stock = selected.getAttribute('data-stock');
+      const descripcion = selected.getAttribute('data-descripcion');
+      const fecha = selected.getAttribute('data-fecha');
+
+      document.querySelector('#modalActualizar input[name="descripcion"]').value = descripcion;
+      document.querySelector('#modalActualizar input[name="nombre"]').value = nombre;
+      document.querySelector('#modalActualizar input[name="precio"]').value = precio;
+      document.querySelector('#modalActualizar input[name="stock"]').value = stock;
+      document.querySelector('#modalActualizar input[name="fecha_ingreso"]').value = fecha;
+    }
+
+    document.getElementById(id).classList.add("show");
+  }
+
+  function abrirModalActivarDesactivarProducto() {
+    const selected = document.querySelector('input[name="producto_seleccionado"]:checked');
+    if (!selected) {
+      alert("Por favor selecciona un producto.");
+      return;
+    }
+
+    const fila = selected.closest("tr");
+    const estado = fila.cells[7].textContent.trim().toLowerCase();
+
+    const titulo = document.getElementById("tituloModalActivarDesactivarProducto");
+    const accion = document.getElementById("accionActivarDesactivarProducto");
+    const idProducto = document.getElementById("producto_activar_desactivar");
+    const btnConfirmar = document.getElementById("btnConfirmarActivarDesactivarProducto");
+
+    idProducto.value = selected.value;
+
+    if (estado === "activo") {
+      titulo.textContent = "¿Deseas desactivar este producto?";
+      accion.value = "desactivar";
+      btnConfirmar.textContent = "Sí, desactivar";
+      btnConfirmar.className = "btn desactivar";
+    } else {
+      titulo.textContent = "¿Deseas activar este producto?";
+      accion.value = "activar";
+      btnConfirmar.textContent = "Sí, activar";
+      btnConfirmar.className = "btn activar";
+    }
+
+    document.getElementById("modalActivarDesactivarProducto").classList.add("show");
+  }
+
+  function cerrarModal(id) {
+    document.getElementById(id).classList.remove("show");
+  }
+
+  function filtrarProductos() {
+    const texto = document.getElementById("buscarProducto").value.toLowerCase();
+    const estado = document.getElementById("filtroEstadoProducto").value;
+    const filas = document.querySelectorAll(".usuarios-table tbody tr");
+
+    filas.forEach((fila) => {
+      const nombre = fila.cells[1].textContent.toLowerCase();
+      const descripcion = fila.cells[2].textContent.toLowerCase();
+      const estadoProducto = fila.cells[7].textContent.toLowerCase();
+
+      const coincideTexto = nombre.includes(texto) || descripcion.includes(texto);
+      const coincideEstado = estado === "" || estadoProducto === estado;
+
+      fila.style.display = coincideTexto && coincideEstado ? "" : "none";
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("loaded");
+    setTimeout(() => {
+      document.querySelectorAll('.alert').forEach(alert => {
+        alert.classList.remove('show');
+        alert.classList.add('hide');
+      });
+    }, 5000);
+  });
+</script>
+
+{% endblock %}

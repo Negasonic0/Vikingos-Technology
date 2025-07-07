@@ -1,0 +1,142 @@
+{# Extiende la plantilla base.html para reutilizar estructura y estilos comunes #}
+{% extends './base.html' %}
+
+{# Define el título de la página #}
+{% block title %} Historial clientes {% endblock %}
+
+{% block link %}
+    <link rel="stylesheet" href="/static/css/historialcliente.css">
+{% endblock %}
+{% block body%}
+    {# La barra de navegación ha sido eliminada de aquí #}
+    <br><br> {# Mantiene el espacio superior después de eliminar el navbar #}
+    <div class="container my-5 panel-naranja" style="position:relative;">
+        <a href="{{ url_for('Menu') }}" class="btn btn-volver-menu fw-bold">
+        ⬅ Volver al menú
+    </a>
+        <h2 class="fw-bold text-center mb-4">Historial de Clientes</h2>
+        <div class="d-flex align-items-center justify-content-around mb-4">
+            <form class="d-flex align-items-center justify-content-center mb-4 gap-2 flex-wrap" method="post">
+                <label for="cedula" class="form-label mb-0 me-2 fw-semibold">Cédula:</label>
+                <input type="hidden"name="accion" value="buscar">
+                <input type="text" id="cedula" name="cedula" class="form-control" placeholder="Ingrese la cédula del cliente" minlength="10" maxlength="10" {% if cliente %} value={{cliente.cedula}} {% endif %} style="max-width:320px; min-width:220px; width:320px;">
+                <button type="submit" class="btn fw-bold btn-main-orange">Buscar</button>
+            </form>
+            <div class="d-flex justify-content-center gap-2 mb-4">
+                {% if cliente %}
+                    {% if archivo_pdf %}
+                        <a class="btn fw-bold btn-main-orange" style="min-width:150px;" href="{{ url_for('static', filename=archivo_pdf) }}" download>Descargar PDF</a>
+                    {% else %}
+                        <form method="post" style="display:inline;">
+                            <input type="hidden" name="accion" value="generar_pdf">
+                            <input type="hidden" name="cedula" value="{{ cliente.cedula }}">
+                            <button type="submit" class="btn fw-bold btn-main-orange" id="generar" style="min-width:150px;">Generar PDF</button>
+                        </form>
+                    {% endif %}
+                    <button type="button" class="btn fw-bold btn-pdf-animado" id="enviar" {% if not archivo_pdf %}disabled{% endif %} onclick="abrirModal('modalEnviar')">Enviar PDF</button>            
+                {% endif %}
+            </div>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="container mt-3">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <div class="pagination justify-content-center mt-4">
+        {% if historial.has_prev %}
+            <a href="{{ url_for('historial_clientes', pagina=historial.prev_num) }}" class="btn btn-outline-secondary me-2">Anterior</a>
+        {% endif %}
+
+        <span class="fw-bold">Página {{ historial.page }} de {{ historial.pages }}</span>
+
+        {% if historial.has_next %}
+            <a href="{{ url_for('historial_clientes', pagina=historial.next_num) }}" class="btn btn-outline-secondary ms-2">Siguiente</a>
+        {% endif %}
+     </div>
+
+        <div class="table-responsive rounded-3 p-2 tabla-panel">
+            <table class="table table-bordered mb-0">
+                <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>Fecha Compra</th>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if not cliente %}
+                    <tr>
+                        <td colspan="6" class="text-center">Porfavor ingrese una cedula</td>
+                    </tr>
+                    {% else %}     
+                        {% if not historial %}
+                        <tr>
+                            <td colspan="6" class="text-center">No se encontraron compras para esta cédula.</td>
+                        </tr>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for item in historial.items %}
+                    <tr>
+                        <td>{{ item.id_venta }}</td>
+                        <td>{{ item.fecha }}</td>
+                        <td>{{ item.producto }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        {# Aplicando el filtro de formato de moneda #}
+                        <td>{{ item.precio_unitario | currency_format }}</td>
+                        <td>{{ item.subtotal | currency_format }}</td>
+                        <td>{{ item.total | currency_format }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+ <div class="modal" id="modalEnviar">
+    <div class="modal-content">
+      <h3>Destinario</h3>
+      <form method="post">
+        <input type="hidden" name="accion" value="enviar_pdf">
+        <input type="email" name="email" placeholder="Correo electronico" required>
+        <div class="d-flex justify-content-center gap-2 mt-3">
+            <button type="submit" class="btn enviar w-50" style="min-width:120px;">Enviar</button>
+            <button type="button" class="btn actualizar w-50" style="min-width:120px;" onclick="cerrarModal('modalEnviar')">Cancelar</button>
+        </div>
+      </form>
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function abrirModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    function cerrarModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+    window.addEventListener("DOMContentLoaded", () => {
+        document.body.classList.add("loaded");
+
+        // Oculta automáticamente las alertas después de 5 segundos
+        setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.classList.remove('show');
+            alert.classList.add('hide');
+        });
+        }, 5000);
+    });
+    </script>
+{% endblock %}

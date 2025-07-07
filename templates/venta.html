@@ -1,0 +1,140 @@
+{% extends "main.html" %}
+{% block title %}Venta - Vikingo Technology{% endblock %}
+{% block link %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/venta.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+    <div class="mb-3">
+        <a href="{{ url_for('Carrito') }}" class="btn-volver-productos">
+            <i class="bi bi-arrow-left"></i> Volver a Productos
+        </a><br><br>
+        <h2 class="mb-0 fw-bold titulo-carrito">
+            Tu <span class="text-orange">Carrito</span>
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-start">
+                    <h4 class="fw-bold mb-4 text-start">Productos en tu carrito</h4>
+                    <div id="productos-carrito"></div>
+                </div>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h4 class="fw-bold mb-4">Resumen del Pedido</h4>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="resumen-label">Subtotal:</span>
+                        <span class="fw-bold" id="subtotal-carrito">$0</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold fs-5">Total:</span>
+                        <span class="fw-bold fs-4 text-orange" id="total-carrito">$0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body">
+                    <h4 class="fw-bold mb-4">Facturación</h4>
+                    <form id="formVenta" method="POST">
+                        <input type="hidden" name="accion" value="generar_pdf">
+                        <input type="hidden" name="productos" id="productosInput">
+                        <div class="mb-3">
+                            <label for="cedula" class="form-label">Cedula</label>
+                            <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cedula del cliente" minlength="10" maxlength="10" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descuento" class="form-label">Descuento (%)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="descuento" name="descuento" min="0" max="100" maxlength="3" value="0" required>
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formaPago" class="form-label">Forma de Pago</label>
+                            <select class="form-select" id="formaPago" name="metodo_pago" required>
+                                <option selected disabled>Selecciona una forma de pago</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="transferencia">Transferencia</option>
+                                <option value="efectivo">Efectivo</option>
+                            </select>
+                        </div>                                 
+                        <button type="button" class="btn btn-factura-blanco w-100 mb-2" onclick="enviarFormulario()">
+                            <i class="bi bi-printer me-2"></i> Generar Factura
+                        </button>
+                        {% if archivo_pdf %}
+                        <button type="button" class="btn btn-factura-blanco w-100 mb-2" id="enviar" data-bs-toggle="modal" data-bs-target="#modalEnviar">Enviar Factura</button>
+                        <a class="btn btn-factura-blanco w-100 mb-2" href="{{ archivo_pdf }}" download>Descargar Factura</a>
+                        {% endif %}
+                        <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#modalVaciarCarrito">
+                            Vaciar Carrito
+                        </button>
+                        <!-- Modal de confirmación para vaciar carrito -->
+                        <div class="modal fade" id="modalVaciarCarrito" tabindex="-1" aria-labelledby="modalVaciarCarritoLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalVaciarCarritoLabel">Confirmar acción</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Está seguro de vaciar el carrito?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        <!-- CORREGIDO: solo vaciarCarrito y cerrar modal con data-bs-dismiss -->
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="vaciarCarrito();">Sí</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para Enviar PDF -->
+    <div class="modal fade" id="modalEnviar" tabindex="-1" aria-labelledby="modalEnviarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalEnviarLabel">Destinatario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        <input type="hidden" name="accion" value="enviar_pdf">
+                        <div class="mb-3">
+                            <label for="emailDestinatario" class="form-label">Correo electrónico</label>
+                            <input type="email" class="form-control" id="emailDestinatario" name="email" placeholder="Correo electrónico"  {% if cliente %} value="{{ cliente.correo }}" {% endif %} required>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 mt-3">
+                            <button type="submit" class="btn enviar w-50" style="min-width:120px;">Enviar</button>
+                            <button type="button" class="btn actualizar w-50" style="min-width:120px;" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="notificacion" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #28a745; color: white; padding: 10px 20px; border-radius: 5px; z-index: 1000;">
+        Producto agregado al carrito 🛒
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/venta.js') }}"></script>
+{% endblock %}

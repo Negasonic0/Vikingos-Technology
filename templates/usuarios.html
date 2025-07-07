@@ -1,0 +1,231 @@
+{% extends './base.html' %}
+
+{% block title %}Usuarios{% endblock %}
+
+{% block link %}
+<!-- Fuente personalizada -->
+<link href="https://fonts.googleapis.com/css?family=Orbitron:400,700&display=swap" rel="stylesheet" />
+<!-- Hoja de estilos -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/registros.css') }}" />
+{% endblock %}
+
+{% block body %}
+<div class="usuarios-container mt-5">
+  <a href="/" class="btn volver">Volver al menú</a>
+  <h2 class="titulo">Usuarios</h2>
+
+  <div class="filtros-usuarios">
+      <form method="get" action="{{ url_for('gestionar_usuarios') }}">
+        <input type="text" name="buscar" placeholder="Buscar por nombre o cédula" value="{{ request.args.get('buscar', '') }}">
+        <select name="estado">
+          <option value="">Todos</option>
+          <option value="activo" {% if request.args.get('estado') == 'activo' %}selected{% endif %}>Activo</option>
+          <option value="inactivo" {% if request.args.get('estado') == 'inactivo' %}selected{% endif %}>Inactivo</option>
+        </select>
+        <button type="submit">Buscar</button>
+      </form>
+  </div>
+
+  <div class="pagination justify-content-center mt-4">
+      {% if usuarios.has_prev %}
+        <a href="{{ url_for('gestionar_usuarios', pagina=usuarios.prev_num) }}" class="btn btn-outline-secondary me-2">Anterior</a>
+      {% endif %}
+
+      <span class="fw-bold">Página {{ usuarios.page }} de {{ usuarios.pages }}</span>
+
+      {% if usuarios.has_next %}
+        <a href="{{ url_for('gestionar_usuarios', pagina=usuarios.next_num) }}" class="btn btn-outline-secondary ms-2">Siguiente</a>
+      {% endif %}
+  </div>
+
+  <form id="usuariosForm" method="post">
+    <div class="scrollable-usuarios">
+      <table class="usuarios-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Selecciona</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in usuarios %}
+          <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.nombre }}</td>
+            <td>{{ u.correo }}</td>
+            <td>{{ 'Administrador' if u.id_rol == 1 else 'Usuario' }}</td>
+            <td>{{ u.estado }}</td>
+            <td>
+              <input type="radio" name="usuario_seleccionado" value="{{ u.id }}" data-nombre="{{ u.nombre }}" data-correo="{{ u.correo }}" data-rol="{{ u.id_rol }}" />
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="container mt-3">
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+  </form>
+
+  <!-- BOTONES FUERA DEL FORM -->
+  <div class="botones-flotantes">
+    <button type="button" class="btn insertar" onclick="abrirModal('modalInsertar')">Insertar</button>
+    <button type="button" class="btn actualizar" onclick="abrirModal('modalActualizar')">Actualizar</button>
+    <button type="button" class="btn" onclick="abrirModalActivarDesactivar()">Activar/Desactivar</button>
+  </div>
+</div>
+
+<!-- MODALES -->
+<div class="modal" id="modalInsertar">
+  <div class="modal-content">
+    <h3>Insertar Usuario</h3>
+    <form method="post">
+      <input type="hidden" name="accion" value="insertar" />
+      <input type="text" name="nombre" placeholder="Nombre completo" required />
+      <input type="email" name="correo" placeholder="Correo electrónico" required />
+      <input type="password" name="contrasena" placeholder="Contraseña" required />
+      <input type="password" name="confirmar" placeholder="Confirmar contraseña" required />
+      <select name="id_rol" required>
+        <option value="2" selected>Usuario</option>
+        <option value="1">Administrador</option>
+      </select>
+      <div class="botones">
+        <button type="submit" class="btn insertar">Guardar</button>
+        <button type="button" class="btn actualizar" onclick="cerrarModal('modalInsertar')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="modalActualizar">
+  <div class="modal-content">
+    <h3>Actualizar Usuario</h3>
+    <form method="post">
+      <input type="hidden" name="accion" value="actualizar" />
+      <input type="hidden" name="usuario_seleccionado" id="usuario_actualizar" />
+      <input type="text" name="nombre" placeholder="Nuevo nombre" required />
+      <input type="email" name="correo" placeholder="Nuevo correo" required />
+      <input type="password" name="contrasena" placeholder="Nueva contraseña (opcional)" />
+      <input type="password" name="confirmar" placeholder="Confirmar contraseña" />
+      <select name="id_rol" required>
+        <option value="2">Usuario</option>
+        <option value="1">Administrador</option>
+      </select>
+      <div class="botones">
+        <button type="submit" class="btn actualizar">Actualizar</button>
+        <button type="button" class="btn actualizar" onclick="cerrarModal('modalActualizar')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="modalActivarDesactivar">
+  <div class="modal-content">
+    <h3 id="tituloModalActivarDesactivar"></h3>
+    <form method="post">
+      <input type="hidden" name="accion" id="accionActivarDesactivar" />
+      <input type="hidden" name="usuario_seleccionado" id="usuario_activar_desactivar" />
+      <div class="botones">
+        <button type="submit" id="btnConfirmarActivarDesactivar" class="btn"></button>
+        <button type="button" class="btn actualizar" onclick="cerrarModal('modalActivarDesactivar')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function abrirModal(id) {
+    const selected = document.querySelector('input[name="usuario_seleccionado"]:checked');
+    if (id !== "modalInsertar" && !selected) {
+      alert("Por favor selecciona un usuario.");
+      return;
+    }
+    if (id === "modalActualizar") {
+      document.getElementById("usuario_actualizar").value = selected.value;
+      document.querySelector('#modalActualizar input[name="nombre"]').value = selected.getAttribute("data-nombre");
+      document.querySelector('#modalActualizar input[name="correo"]').value = selected.getAttribute("data-correo");
+      document.querySelector('#modalActualizar select[name="id_rol"]').value = selected.getAttribute("data-rol");
+    }
+    document.getElementById(id).classList.add("show");
+  }
+
+  function abrirModalActivarDesactivar() {
+    const selected = document.querySelector('input[name="usuario_seleccionado"]:checked');
+    if (!selected) {
+      alert("Por favor selecciona un usuario.");
+      return;
+    }
+    const row = selected.closest("tr");
+    const estado = row.cells[4].textContent.trim().toLowerCase();
+
+    const titulo = document.getElementById("tituloModalActivarDesactivar");
+    const accion = document.getElementById("accionActivarDesactivar");
+    const idUsuario = document.getElementById("usuario_activar_desactivar");
+    const btnConfirmar = document.getElementById("btnConfirmarActivarDesactivar");
+
+    idUsuario.value = selected.value;
+    if (estado === "activo") {
+      titulo.textContent = "¿Deseas desactivar este usuario?";
+      accion.value = "desactivar";
+      btnConfirmar.textContent = "Sí, desactivar";
+      btnConfirmar.className = "btn desactivar";
+    } else {
+      titulo.textContent = "¿Deseas activar este usuario?";
+      accion.value = "activar";
+      btnConfirmar.textContent = "Sí, activar";
+      btnConfirmar.className = "btn activar";
+    }
+
+    document.getElementById("modalActivarDesactivar").classList.add("show");
+  }
+
+  function cerrarModal(id) {
+    document.getElementById(id).classList.remove("show");
+  }
+
+  function filtrarUsuarios() {
+    const texto = document.getElementById("buscarUsuario").value.toLowerCase();
+    const rol = document.getElementById('filtroRol').value;
+    const estado = document.getElementById("filtroEstado").value;
+    const filas = document.querySelectorAll(".usuarios-table tbody tr");
+
+    filas.forEach((fila) => {
+      const nombre = fila.cells[1].textContent.toLowerCase();
+      const correo = fila.cells[2].textContent.toLowerCase();
+      const rolUsuario = fila.cells[3].textContent.toLowerCase();
+      const estadoUsuario = fila.cells[4].textContent.toLowerCase();
+
+      const coincideTexto = nombre.includes(texto) || correo.includes(texto);
+      const rolCoincide = rol === '' || rolUsuario === (rol === '1' ? 'administrador' : 'usuario');
+      const coincideEstado = estado === "" || estadoUsuario === estado;
+
+      fila.style.display = coincideTexto && rolCoincide && coincideEstado ? "" : "none";
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    document.body.classList.add("loaded");
+    setTimeout(() => {
+      document.querySelectorAll('.alert').forEach(alert => {
+        alert.classList.remove('show');
+        alert.classList.add('hide');
+      });
+    }, 5000);
+  });
+</script>
+{% endblock %}

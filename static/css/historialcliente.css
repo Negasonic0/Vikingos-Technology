@@ -1,0 +1,452 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+/* Fuente global */
+* {
+    font-family: 'Orbitron', Arial, sans-serif !important;
+}
+
+/* Fondo de naturaleza para toda la página con marca de agua */
+body {
+    background-image:
+        linear-gradient(90deg, #2b2b2b 0%, #2b2b2b 100%),
+        url('/static/images/icono-logo.ico');
+    background-repeat: no-repeat, no-repeat;
+    background-position: center center, center center;
+    background-size: cover, 220px 220px;
+    position: relative;
+    font-family: 'Orbitron', Arial, sans-serif;
+    text-transform: capitalize;
+    min-height: 100vh;
+}
+
+/* Estilos y animaciones para el navbar */
+.navbar, .navbar.bg-white, .navbar-light {
+    background: #fff !important;
+    color: #222 !important;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
+    border-radius: 0 0 12px 12px;
+}
+
+.navbar .nav-link, .navbar .navbar-brand {
+    color: #222 !important;
+    transition: color 0.2s;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.navbar .nav-link:hover, .navbar .navbar-brand:hover {
+    color: #ff8000 !important;
+}
+
+.btn-navbar-orange {
+    background: #ff8000;
+    color: #ffffff !important;
+    border: 2px solid transparent; /* Asegura que el borde siempre tenga 2px para evitar el "salto" */
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s, border-color 0.2s; /* Añadida transición para border-color */
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px #ff800033;
+}
+.btn-navbar-orange:hover {
+    background: #fff;
+    color: #ff8000 !important;
+    border-color: #ff8000; /* Cambia solo el color del borde, no el ancho */
+}
+
+/* Ícono de usuario alineado */
+#btn-login span {
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+
+/* Panel degradado naranja/rojo con bordes redondeados */
+.panel-naranja {
+    background: linear-gradient(135deg, rgba(255,128,0,0.92) 0%, rgba(219,2,2,0.92) 100%);
+    border-radius: 22px;
+    padding: 40px 32px 32px 32px;
+    box-shadow: 0 4px 32px #00000022;
+    max-width: 1200px;
+    width: 95%;
+    margin: 80px auto 0 auto;
+    color: #fff;
+    border: 4px solid #ff8000;
+    overflow-x: auto;
+}
+
+/* Título blanco y centrado */
+.panel-naranja h2 {
+    color: #fff !important;
+    font-size: 2.3rem;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+}
+
+/* Etiqueta cédula blanca */
+.panel-naranja label[for="cedula"] {
+    color: #fff !important;
+    font-size: 1.1rem;
+}
+
+/* Botones principales naranja */
+.btn-main-orange {
+    background: #ff8000;
+    color: #fff !important;
+    border: 2px solid transparent; /* Asegura que el borde siempre tenga 2px para evitar el "salto" */
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s, border-color 0.2s; /* Añadida transición para border-color */
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px #ff800033;
+}
+.btn-main-orange:hover {
+    background: #fff;
+    color: #ff8000 !important;
+    border-color: #ff8000; /* Cambia solo el color del borde, no el ancho */
+}
+
+/* Animación para el botón Enviar PDF */
+.btn-pdf-animado {
+    background: #888;
+    color: white;
+    border: 2px solid transparent; /* Asegura que el borde siempre tenga 2px para evitar el "salto" */
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition:
+        background 0.2s,
+        color 0.2s,
+        border-color 0.2s, /* Añadida transición para border-color */
+        box-shadow 0.2s;
+}
+.btn-pdf-animado:hover, .btn-pdf-animado:focus {
+    background: #ff8000 !important;
+    color: #fff !important;
+    border-color: #ff8000; /* Cambia solo el color del borde, no el ancho */
+    box-shadow: 0 6px 18px #ff800033;
+    /* Las propiedades 'transform' se anularán por las reglas más generales abajo */
+}
+
+/* Input ancho para placeholder completo */
+.input-cedula-grande {
+    min-width: 220px;
+    width: 320px;
+    max-width: 100%;
+}
+
+/* Tabla con borde y cabecera naranja */
+.tabla-panel {
+    background: #fff2e0;
+    border-radius: 12px;
+    border: 3px solid #ff8000;
+    margin-top: 1.5rem;
+    padding: 0.5rem;
+    overflow-x: auto;
+}
+.tabla-panel table {
+    background: transparent;
+    min-width: 900px;
+    width: 100%;
+    table-layout: auto;
+    word-break: break-word;
+}
+.tabla-panel th, .tabla-panel td {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 220px;
+}
+.tabla-panel th {
+    background: #ff8000 !important;
+    color: #fff !important;
+    text-align: center;
+    font-size: 1.05rem;
+}
+.tabla-panel td {
+    background: #fff;
+    color: #222;
+    text-align: center;
+}
+
+/* Tabla responsiva tipo cards en móviles */
+@media (max-width: 768px) {
+    .tabla-panel table,
+    .tabla-panel thead,
+    .tabla-panel tbody,
+    .tabla-panel th,
+    .tabla-panel td,
+    .tabla-panel tr {
+        display: block;
+        width: 100%;
+    }
+    .tabla-panel thead tr {
+        display: none;
+    }
+    .tabla-panel tr {
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #ff8000;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px #ff800033;
+        padding: 0.5rem 0;
+    }
+    .tabla-panel td {
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+        min-height: 40px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+        color: #222;
+        font-size: 1rem;
+        white-space: normal;
+        max-width: 100%;
+        overflow: visible;
+    }
+    .tabla-panel td:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 48%;
+        padding-left: 10px;
+        white-space: normal;
+        font-weight: bold;
+        color: #ff8000;
+        content: attr(data-label);
+    }
+}
+
+/* Responsive ajustes generales */
+@media (max-width: 1400px) {
+    .panel-naranja {
+        max-width: 99vw;
+        padding: 18px 8px;
+    }
+    .tabla-panel table {
+        min-width: 700px;
+    }
+}
+@media (max-width: 991.98px) {
+    .panel-naranja {
+        padding: 12px 2vw;
+        max-width: 100vw;
+    }
+    .tabla-panel {
+        padding: 0.2rem;
+    }
+    .tabla-panel table {
+        min-width: 600px;
+    }
+}
+@media (max-width: 600px) {
+    .panel-naranja {
+        padding: 4vw 1vw;
+        max-width: 100vw;
+    }
+    .tabla-panel table {
+        min-width: 400px;
+        font-size: 0.92rem;
+    }
+}
+
+/* Quitar animación y negrilla del botón Iniciar Sesión */
+#btn-login,
+#btn-login.btn-navbar-orange,
+#btn-login.btn-main-orange,
+.btn.btn-navbar-orange,
+.btn.btn-main-orange,
+.btn.btn-orange {
+    font-weight: 400 !important;
+    transition: none !important;
+    box-shadow: none !important;
+    transform: none !important; /* Asegura que no haya transformaciones */
+}
+
+/* Quitar negrilla de todos los textos en la tabla, formulario y navbar */
+th, td, label, .form-label, .navbar .nav-link, .navbar .navbar-brand {
+    font-weight: 400 !important;
+}
+
+/* Quitar animación de movimiento de los botones Buscar y Generar PDF */
+/* Esta regla también asegura que .btn-pdf-animado no tenga 'transform: scale' */
+.btn-main-orange,
+.btn-main-orange:hover,
+.btn-main-orange:focus,
+.btn-pdf-animado,
+.btn-pdf-animado:hover,
+.btn-pdf-animado:focus {
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Botón deshabilitado: gris */
+#enviar:disabled {
+    background-color: #ccc !important;
+    color: #fff !important;
+    border-color: #ccc !important;
+    cursor: not-allowed;
+}
+/* Botón habilitado: naranja */
+#enviar:not(:disabled) {
+    background: #ff8000 !important;
+    color: #fff !important;
+    border-color: #ff8000 !important;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+#enviar:not(:disabled):hover {
+    background: #fff !important;
+    color: #ff8000 !important;
+    border-color: #ff8000 !important;
+    box-shadow: 0 2px 8px #ff800033;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, rgba(255,128,0,0.92) 0%, rgba(219,2,2,0.92) 100%);
+    color: #fff;
+    border: 4px solid #ff8000;
+    margin: 8% auto;
+    padding: 32px 24px 24px 24px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 5px 24px rgba(255,128,0,0.18), 0 2px 8px rgba(0,0,0,0.10);
+    position: relative;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-bottom: 18px;
+    color: #fff !important; /* Cambia el texto "Destinatario" a blanco */
+    font-weight: 700;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+}
+
+.modal-content form input[type="email"] {
+    width: 92%;
+    margin-bottom: 18px;
+    padding: 10px 12px;
+    border-radius: 7px;
+    border: 1.5px solid #ff8000;
+    font-size: 1rem;
+    color: #222;
+    background: #fff8f0;
+    transition: border-color 0.2s;
+}
+
+.modal-content form input[type="email"]:focus {
+    border-color: #db0202;
+    outline: none;
+}
+
+#modalEnviar .btn.enviar,
+#modalEnviar .btn.actualizar {
+    background: #ff8000;
+    color: #fff !important;
+    border: 2px solid #ff8000;
+    width: 120px;
+    min-width: 120px;
+    max-width: 200px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    margin: 0;
+    box-shadow: 0 2px 8px #ff800033;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+#modalEnviar .btn.enviar:hover,
+#modalEnviar .btn.actualizar:hover {
+    background: #fff;
+    color: #ff8000 !important;
+    border-color: #ff8000;
+}
+
+.modal-content form input[type="email"]:focus {
+    border-color: #db0202;
+    outline: none;
+}
+
+/* Aquí pega el nuevo bloque */
+.modal-content form input[type="email"]::placeholder,
+.panel-naranja input[name="cedula"]::placeholder {
+    color: #ff8000;
+    opacity: 1;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+}
+
+.panel-naranja input[name="cedula"] {
+    border: 1.5px solid #ff8000;
+    border-radius: 7px;
+    background: #fff8f0;
+    color: #222;
+    padding: 10px 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+.panel-naranja input[name="cedula"]:focus {
+    border-color: #db0202;
+    outline: none;
+}
+
+/* Botón volver al menú, esquina superior izquierda del container */
+.btn-volver-menu {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    background: #ff8000;
+    color: #fff !important;
+    border: 2px solid #ff8000;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px #ff800033;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    z-index: 10;
+}
+.btn-volver-menu:hover {
+    background: #fff;
+    color: #ff8000 !important;
+    border-color: #ff8000;
+    text-decoration: none;
+}
+
+.alert.hide {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  transition: opacity 0.5s , height 0.5s, margin 0.5s, padding 0.5s;
+  pointer-events: none;
+}
+
+/* Quitar flechas del input Cedula en Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+

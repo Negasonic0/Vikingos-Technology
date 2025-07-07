@@ -1,0 +1,193 @@
+/* Fuente Orbitron */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+body {
+    background: #2d2d2d;
+    color: #fff;
+    font-family: 'Orbitron', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Panel principal */
+/* ...existing code... */
+.panel-naranja {
+    background: radial-gradient(circle at 20% 0%, #ff5100 0%, #ff6c28 60%, #d90000 100%);
+    border-radius: 22px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18), 0 0 0 4px #ff8800 inset;
+    padding: 32px 24px 24px 24px;
+    margin: 40px auto;
+    max-width: 1200px;
+    border: 3px solid #ff8d2f;
+    position: relative;
+}
+/* ...existing code... */
+
+/* Botón volver */
+.btn-volver {
+    background: #ff8800;
+    width: 230px;
+    color: #fff;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+    text-decoration: none;
+    border-radius: 12px;
+    padding: 14px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px #ffb84d;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    display: block;
+}
+
+.btn-volver:hover {
+    background: #ffb84d;
+    color: #23272b;
+}
+
+/* Título */
+.panel-naranja h1 {
+    text-align: center;
+    font-size: 2.7rem;
+    color: #fff;
+    margin-bottom: 28px;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px #ff8800, 0 0 10px #fff3e0;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-weight: 700;
+}
+
+/* Formulario de búsqueda */
+.form-busqueda {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 18px 18px;
+}
+
+.form-busqueda input[type="text"], .form-busqueda select {
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1.1rem;
+    outline: none;
+    background: #fff;
+    color: #ff8800;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-weight: 700;
+    width: 260px;
+    margin-right: 8px;
+}
+
+.form-busqueda .btn {
+    padding: 12px 22px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1.1rem;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    margin-right: 8px;
+    background: #ff8800;
+    color: #fff;
+    box-shadow: 0 2px 8px #ffb84d;
+}
+
+.form-busqueda .btn:hover {
+    background: #ffb84d;
+    color: #23272b;
+}
+
+/* Tabla */
+.tabla-historial {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: transparent;
+    color: #23272b;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 18px;
+}
+
+.tabla-historial thead th {
+    background: #ff8800;
+    color: #fff;
+    font-size: 1.15rem;
+    border-top: 4px solid #fff3e0;
+    border-bottom: 3px solid #ffb84d;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-weight: 700;
+    text-align: center;
+}
+
+.tabla-historial th, .tabla-historial td {
+    padding: 14px 10px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-family: 'Orbitron', Arial, sans-serif;
+    border-right: 2px solid #ffb84d;
+    border-bottom: 2px solid #ffb84d;
+    background: transparent;
+}
+
+.tabla-historial tbody tr {
+    background: #fff;
+    transition: background 0.2s;
+}
+
+.tabla-historial tbody tr:hover {
+    background: #fff3e0;
+}
+
+.tabla-historial th:last-child, .tabla-historial td:last-child {
+    border-right: none;
+}
+
+.tabla-historial tr:last-child td {
+    border-bottom: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .panel-naranja {
+        padding: 12px 2vw 12px 2vw;
+        max-width: 99vw;
+    }
+    .tabla-historial th, .tabla-historial td {
+        font-size: 1rem;
+        padding: 10px 4px;
+    }
+    .form-busqueda input[type="text"] {
+        width: 120px;
+    }
+    .panel-naranja h1 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ...existing code... */
+
+.form-busqueda input[type="date"] {
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1.1rem;
+    outline: none;
+    background: #fff;
+    color: #ff8800;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-weight: 700;
+    width: 200px;
+    margin-right: 8px;
+}
+
+/* ...existing code... */

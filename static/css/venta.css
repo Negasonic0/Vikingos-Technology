@@ -1,0 +1,610 @@
+/* Importa la fuente Orbitron, usada en el navbar y otros elementos del tema */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+/* Fuente global para toda la página, haciendo que todo use Orbitron */
+* {
+    font-family: 'Orbitron', Arial, sans-serif !important;
+}
+
+/* Estilos de fondo para el cuerpo de la página */
+body {
+    background: linear-gradient(90deg, #2b2b2b 0%, #2b2b2b 100%);
+    text-transform: capitalize;
+    min-height: 100vh;
+}
+
+/* Colores de texto personalizados */
+.text-orange {
+    color: #ff8000 !important;
+}
+.text-white {
+    color: #fff !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+/* Estilos del navbar (copiados de carrito.css para consistencia) */
+.navbar, .navbar.bg-white, .navbar-light {
+    background: #fff !important;
+    color: #222 !important;
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);
+    border-radius: 0 0 12px 12px;
+}
+
+/* Color de los enlaces y marca */
+.navbar .nav-link, .navbar .navbar-brand {
+    color: #222 !important;
+    transition: color 0.2s; /* Transición para el color al pasar el cursor */
+    text-transform: capitalize;
+    font-weight: 600; /* Asegura el peso de la fuente */
+}
+
+/* Hover en enlaces */
+.navbar .nav-link:hover, .navbar .navbar-brand:hover {
+    color: #ff8000 !important; /* Texto naranja al hacer hover */
+}
+
+/* === REGLAS PARA EL BOTÓN DE INICIO DE SESIÓN/USUARIO EN EL NAVBAR (.btn-orange) === */
+/* Estilo base del botón: fondo blanco, borde naranja, texto oscuro (como en la imagen de carrito.html) */
+.btn-orange {
+    background: #fff;
+    color: #222 !important; /* Texto oscuro por defecto */
+    border: 2px solid #ff8000; /* Borde naranja */
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600; /* Asegura el peso de la fuente */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.2s ease-in-out; /* Transición suave para todos los cambios */
+}
+
+/* Estilo al pasar el cursor (HOVER): el texto cambia a naranja */
+.btn-orange:hover {
+    color: #ff8000 !important; /* El texto se vuelve naranja al hacer hover */
+    transform: translateY(-2px); /* Ligero levantamiento */
+    box-shadow: 0 4px 12px rgba(255,128,0,0.2); /* Sombra más pronunciada */
+}
+
+/* Estilo al hacer clic o cuando el botón tiene el foco (FOCUS) o cuando el menú está abierto (.show) */
+.btn-orange:focus,
+.btn-orange.show { /* Cuando el botón tiene foco o el dropdown está abierto */
+    background: #fff; /* Mantiene el fondo blanco */
+    color: #222 !important; /* Mantiene el texto oscuro */
+    border-color: #ff8000; /* Mantiene el borde naranja */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15) inset; /* Sombra sutil interna para dar sensación de "presionado" */
+    transform: translateY(0); /* No hay levantamiento en este estado */
+    outline: none; /* Elimina el contorno de foco predeterminado del navegador */
+}
+
+/* Si el botón es hover ESPECÍFICAMENTE mientras el menú está abierto (show), el texto sí se pone naranja */
+.btn-orange.show:hover {
+    color: #ff8000 !important; /* El texto se vuelve naranja si se hace hover con el menú abierto */
+    transform: translateY(-2px); /* Ligero levantamiento */
+    box-shadow: 0 4px 12px rgba(255,128,0,0.2); /* Sombra más pronunciada */
+}
+/* === FIN DE REGLAS PARA EL BOTÓN DE INICIO DE SESIÓN/USUARIO === */
+
+/* Animación y color para opciones del menú desplegable (copiado de carrito.css) */
+.dropdown-menu .dropdown-item {
+    transition: color 0.2s, background 0.2s;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    color: #ff8000 !important; /* Texto naranja al hacer hover */
+    background-color: #fff3e0 !important; /* Fondo claro al hacer hover */
+}
+
+/* Ícono de usuario alineado */
+#btn-login span {
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+
+.navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+@media (max-width: 991.98px) {
+    .navbar .nav-link {
+        margin-right: 0.5rem;
+        font-size: 1rem;
+    }
+    .btn-navbar-orange { /* Aunque en este HTML se usa btn-orange, mantenemos para compatibilidad */
+        width: 100%;
+        margin-top: 1rem;
+    }
+}
+
+
+/* --- ESTILOS ESPECÍFICOS DE VENTA.HTML (mantener los originales sin modificar) --- */
+
+.btn-volver-productos {
+    background: transparent;
+    color: #fff !important;
+    border: 2px solid #fff;
+    border-radius: 2rem;
+    padding: 0.4rem 1.2rem;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    display: inline-block;
+    text-decoration: none;
+}
+.btn-volver-productos:hover {
+    background: #fff;
+    color: #ff8000 !important;
+    border: 2px solid #ff8000;
+    text-decoration: none;
+}
+
+.titulo-carrito {
+    color: #fff !important;
+    font-size: 2.3rem;
+    letter-spacing: 1px;
+}
+.titulo-carrito .text-orange {
+    color: #ff8000 !important;
+}
+
+
+.card {
+    background: linear-gradient(135deg, #ff8000 0%, #db0202ef 50%, #c43004 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.resumen-label {
+    font-weight: 600;
+    color: #fff !important;
+}
+
+#subtotal-carrito,
+#total-carrito,
+.text-success {
+    color: #fff !important;
+}
+
+
+/* Botón deshabilitado: gris */
+#enviar:disabled {
+    background-color: #ccc !important;
+    color: #fff !important;
+    border-color: #ccc !important;
+    cursor: not-allowed;
+}
+/* Botón habilitado: naranja */
+#enviar:not(:disabled) {
+    background: #ff8000 !important;
+    color: #fff !important;
+    border-color: #ff8000 !important;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+#enviar:not(:disabled):hover {
+    background: #fff !important;
+    color: #ff8000 !important;
+    border-color: #ff8000 !important;
+    box-shadow: 0 2px 8px #ff800033;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+
+/* Estilos para el botón de Generar PDF (ajustado para no interferir con #enviar) */
+.btn-pdf-animado {
+    background: #888; /* Mantengo un color base si no es #enviar */
+    color: white;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition:
+        background 0.2s,
+        color 0.2s,
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+.btn-pdf-animado:hover, .btn-pdf-animado:focus {
+    background: #ff8000 !important;
+    color: #fff !important;
+    border-color: #ff8000;
+    box-shadow: 0 6px 18px #ff800033;
+    transform: translateY(-2px);
+}
+
+/* Estilos para el botón "Descargar Factura" (btn-factura-blanco) */
+.btn-factura-blanco {
+    background-color: #f0f0f0;
+    color: #333 !important;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.btn-factura-blanco:hover {
+    background-color: #e0e0e0;
+    color: #000 !important;
+    border-color: #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-danger {
+    border-radius: 8px;
+    font-weight: 600;
+    background: #ff4d4f !important;
+    color: #fff !important;
+    border: none;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-danger:hover, .btn-danger:focus {
+    background: #fff !important;
+    color: #ff4d4f !important;
+    border: 2px solid #ff4d4f;
+}
+
+
+/* --- ESTILOS PARA EL MODAL PERSONALIZADO (IMAGEN REFERENCIA) --- */
+.modal {
+    left: 0;
+    top: 0;
+    width: 100vw; /* Usar 100vw y 100vh para asegurar que ocupe toda la ventana */
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Fondo oscuro semitransparente */
+    align-items: center; /* Centrar verticalmente */
+    justify-content: center; /* Centrar horizontalmente */
+    transition: background-color 0.3s ease-in-out;
+}
+
+.modal .modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.modal-content {
+    /* Ajuste del degradado para que coincida más con la imagen */
+    background: linear-gradient(135deg, rgba(255,128,0,0.92) 0%, rgba(219,2,2,0.92) 100%);
+    color: #fff; /* Texto blanco para el contenido del modal */
+    border: 4px solid #ff8000; /* Borde naranja visible */
+    margin: 8% auto; /* Ajuste del margen para centrar verticalmente */
+    padding: 32px 24px 24px 24px; /* Ajuste del padding */
+    border-radius: 16px; /* Bordes redondeados más pronunciados */
+    width: 100%;
+    max-width: 400px;
+    /* Sombras ajustadas para que sean más prominentes y con color naranja */
+    box-shadow: 0 5px 24px rgba(255,128,0,0.18), 0 2px 8px rgba(0,0,0,0.10);
+    position: relative;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-bottom: 18px; /* Ajuste del margen inferior */
+    color: #fff !important; /* Título "Destinatario" en blanco */
+    font-weight: 700; /* Más negrita */
+    font-size: 1.3rem; /* Tamaño de fuente ajustado */
+    letter-spacing: 1px; /* Espaciado de letras */
+}
+
+.modal-content form input[type="email"] {
+    width: 92%; /* Ajuste de ancho */
+    margin-bottom: 18px; /* Ajuste del margen inferior */
+    padding: 10px 12px; /* Ajuste del padding */
+    border-radius: 7px; /* Bordes ligeramente redondeados */
+    border: 1.5px solid #ff8000; /* Borde naranja */
+    font-size: 1rem;
+    color: #222; /* Texto oscuro */
+    background: #fff8f0; /* Fondo blanco-crema */
+    transition: border-color 0.2s; /* Transición para el borde */
+}
+
+.modal-content form input[type="email"]:focus {
+    border-color: #db0202; /* Borde rojo al enfocar */
+    outline: none; /* Eliminar contorno por defecto */
+}
+
+/* Placeholder para el campo de correo electrónico del modal */
+.modal-content form input[type="email"]::placeholder {
+    color: #ff8000; /* Color naranja para el placeholder */
+    opacity: 1; /* Asegurar que sea completamente opaco */
+    font-weight: 600; /* Más negrita */
+    letter-spacing: 0.5px; /* Espaciado de letras */
+    font-size: 1rem; /* Tamaño de fuente */
+}
+
+/* Estilos para los botones "Guardar" y "Cancelar" dentro del modal */
+#modalEnviar .btn.enviar,
+#modalEnviar .btn.actualizar {
+    background: #ff8000; /* Fondo naranja */
+    color: #fff !important; /* Texto blanco */
+    border: 2px solid #ff8000; /* Borde naranja */
+    width: 120px; /* Ancho fijo */
+    min-width: 120px; /* Ancho mínimo */
+    max-width: 200px; /* Ancho máximo */
+    border-radius: 8px; /* Bordes redondeados */
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.5rem 0; /* Padding vertical */
+    margin: 0; /* Eliminar margen */
+    box-shadow: 0 2px 8px #ff800033; /* Sombra */
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+#modalEnviar .btn.enviar:hover,
+#modalEnviar .btn.actualizar:hover {
+    background: #fff; /* Fondo blanco al pasar el cursor */
+    color: #ff8000 !important; /* Texto naranja al pasar el cursor */
+    border-color: #ff8000; /* Borde naranja al pasar el cursor */
+}
+
+/* Contenedor de botones en el modal */
+.modal-content .d-flex {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Espacio entre botones */
+    margin-top: 30px;
+}
+
+/* Media Queries para responsividad del modal */
+@media (max-width: 576px) {
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+        margin-top: 10%; /* Ajuste para móviles */
+    }
+    .modal-content h3 {
+        font-size: 1.5rem;
+    }
+    .modal-content input[type="email"] {
+        font-size: 1rem;
+    }
+    .modal-content .btn {
+        font-size: 1rem;
+        height: 40px;
+    }
+}
+
+/* Placeholder para el campo de cédula en el panel naranja */
+.panel-naranja input[name="cedula"]::placeholder {
+    color: #ff8000; /* Naranja para el placeholder */
+    opacity: 1;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 1rem;
+}
+
+.panel-naranja input[name="cedula"] {
+    border: 1.5px solid #ff8000; /* Borde naranja */
+    border-radius: 7px;
+    background: #fff8f0; /* Fondo blanco-crema */
+    color: #222; /* Texto oscuro */
+    padding: 10px 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+.panel-naranja input[name="cedula"]:focus {
+    border-color: #db0202; /* Borde rojo al enfocar */
+    outline: none;
+}
+
+/* Botón volver al menú, esquina superior izquierda del container */
+.btn-volver-menu {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    background: #ff8000;
+    color: #fff !important;
+    border: 2px solid #ff8000;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px #ff800033;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    z-index: 10;
+}
+.btn-volver-menu:hover {
+    background: #fff;
+    color: #ff8000 !important;
+    border-color: #ff8000;
+    text-decoration: none;
+}
+
+/* Alertas flotantes (Notificacion) */
+#notificacion {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  #notificacion.mostrar {
+    display: block;
+    opacity: 1;
+  }
+
+/* Transiciones para los botones de factura y peligro */
+.btn-factura-blanco, .btn-danger {
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+/* Efecto al pasar el cursor para botones de factura y peligro */
+.btn-factura-blanco:hover {
+  background-color: #ffc107;
+  color: #222;
+  transform: scale(1.05);
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Oculta las alertas con una animación */
+.alert.hide {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  transition: opacity 0.5s , height 0.5s, margin 0.5s, padding 0.5s;
+  pointer-events: none;
+}
+
+/* --- ESTILOS ACTUALIZADOS PARA LOS BOTONES DE CANTIDAD Y ELIMINAR EN EL CARRITO --- */
+
+/* Estilos para los botones de cantidad (+ y -) */
+.card-body .d-flex .btn-outline-secondary {
+    width: 30px; /* Ancho fijo para forma circular */
+    height: 30px; /* Alto fijo para forma circular */
+    border-radius: 50%; /* Hacerlos circulares */
+    border: 2px solid #ff8000; /* Borde naranja vibrante */
+    background-color: #ff8000; /* Fondo naranja sólido */
+    color: #fff !important; /* Texto blanco */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Eliminar padding por defecto */
+    font-size: 1.2rem; /* Tamaño de fuente para los símbolos */
+    font-weight: bold;
+    transition: all 0.2s ease-in-out; /* Transición suave para todos los cambios */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil */
+}
+
+.card-body .d-flex .btn-outline-secondary:hover {
+    background-color: #fff; /* Fondo blanco al pasar el cursor */
+    color: #ff8000 !important; /* Texto naranja al pasar el cursor */
+    box-shadow: 0 4px 8px rgba(255,128,0,0.3); /* Sombra más pronunciada */
+    transform: translateY(-1px); /* Ligero levantamiento */
+}
+
+/* Estilos para el botón de eliminar producto (X) */
+.card-body .btn-remove-item {
+    background-color: #ffffff !important; /* Fondo blanco */
+    color: #ffffff !important; /* Texto blanco */
+    border: 2px solid #ffffff !important;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0;
+    box-shadow: none;
+    transition: none;
+}
+
+
+.card-body .btn-remove-item:hover {
+    background-color: #dc3545; /* Fondo rojo al pasar el cursor */
+    color: #fff !important; /* Texto blanco al pasar el cursor */
+    box-shadow: 0 4px 8px rgba(220,53,69,0.3); /* Sombra más pronunciada */
+    transform: translateY(-1px); /* Ligero levantamiento */
+}
+
+/* Asegurar que el texto de la cantidad esté bien alineado y visible */
+.card-body .d-flex .mx-2.fs-5 {
+    color: #fff; /* Asegura que el texto de la cantidad sea blanco */
+    font-weight: bold; /* Hacer el texto más negrita */
+    min-width: 20px; /* Asegurar un ancho mínimo para que no se "aplasten" los números */
+    text-align: center; /* Centrar el texto de la cantidad */
+}
+
+.bi-x {
+  background-color: #fff;
+  color: #000 !important;
+  border: 2px solid #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bi-x:hover {
+  background-color: #ff0000;
+  color: #fff !important;
+  border-color: #ff0000;
+}
+
+.custom-modal {
+  display: none;
+  position: fixed;
+  z-index: 1050;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.custom-modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+}
+.custom-close {
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+.custom-close:hover {
+  color: black;
+}
+
+.custom-modal {
+  display: none;
+  position: fixed;
+  z-index: 1050;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.custom-modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.custom-close {
+  color: #aaa;
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+.custom-close:hover {
+  color: black;
+}
+

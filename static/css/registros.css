@@ -1,0 +1,367 @@
+/* Fondo general y transición al cargar */
+body {
+  background: linear-gradient(90deg, #2b2b2b 0%, #2b2b2b 100%);
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.8s ease-in-out;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+/* Contenedor principal */
+.usuarios-container {
+  background: linear-gradient(120deg,#ff8000 0%, #db0202ef 50%, #c43004 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+  border: 4px solid #ff8c69;
+  width: 90vw;
+  max-width: 1200px;
+  padding: 40px 30px;
+  opacity: 0;
+  transform: scale(0.98);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  position: relative;
+  z-index: 1;
+}
+
+body.loaded .usuarios-container {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Título principal */
+.titulo {
+  color: #fff;
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 32px;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  font-weight: bold;
+}
+
+/* Tabla responsiva con ancho fijo por columna */
+.usuarios-table {
+  width: 100%;                                                 
+  border-collapse: collapse;                                   
+  margin-bottom: 30px;                                         
+  color:#fff;                                                 
+}
+
+.usuarios-table thead {
+  background: linear-gradient(90deg, #ff8c69 0%, #ff8000 100%);
+}
+
+.usuarios-table th,
+.usuarios-table td {
+  padding: 12px;                                               
+  text-align: center;                                         
+  border-bottom: 1px solid #ff8c69;                            
+}
+.usuarios-table input[type="radio"] {
+  width: 22px;
+  height: 22px;
+  accent-color: #007bff; 
+  cursor: pointer;
+}
+
+
+.usuarios-table input[type="radio"] {
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  accent-color: #007bff;
+  cursor: pointer;
+}
+
+/* Botones agrupados */
+.botones {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* =================== NUEVO ESTILO PARA TODOS LOS BOTONES =================== */
+.btn {
+  background: linear-gradient(135deg, #ff7b5f, #ff9050);
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+  min-width: 120px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #ff684d, #ff7c3a);
+  transform: scale(1.03);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* =================== IMAGEN FOOTER COMO FONDO DETRÁS =================== */
+
+.imagen-footer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  text-align: center;
+}
+
+.imagen-footer img.logo {
+  width: 2000px;
+  max-width: 90%;
+  height: auto;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.imagen-footer img.logo:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.modal .botones {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  gap: 13px;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+input, select {
+  background-color: white;
+}
+
+.modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  width: 200vw;
+  max-width: 800px;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.modal.show .modal-content {
+  background: linear-gradient(90deg, #363535fe 0%, #363535fe 100%);
+  transform: scale(1);
+  opacity: 1;
+}
+
+.modal-content h3 {
+  margin-bottom: 0px;
+  text-align: center;
+  color: #ff8000;
+}
+
+.modal-content form input {
+  background-color: #ffffff;
+  color: #000000;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px 14px 5px 14px;
+  border: 2px solid #2b2b2b;
+  border-radius: 6px;
+}
+
+.alert.hide {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  transition: opacity 0.5s , height 0.5s, margin 0.5s, padding 0.5s;
+  pointer-events: none;
+}
+
+/* Estilo filtros */
+.filtros-usuarios {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: rgba(255, 255, 255, 0.10);
+  padding: 16px 24px 14px 24px;
+  border-radius: 12px;
+  margin-bottom: 28px;
+  margin-top: -18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  position: relative;
+  z-index: 2;
+}
+
+/* ==== NUEVO: Estilo mejorado filtros ==== */
+.filtros-usuarios input[type="text"],
+.filtros-usuarios select {
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 2.5px solid #ff8000;
+  font-size: 1.08rem;
+  min-width: 20px;
+  outline: none;
+  background: #ff8000;
+  color: #fff;
+  min-width: 170px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(255,128,0,0.07);
+}
+.filtros-usuarios input[type="text"] {
+  min-width: 350px;
+}
+
+.filtros-usuarios input[type="text"]::placeholder {
+  color: #fff;
+  opacity: 1;
+}
+
+.filtros-usuarios input[type="text"]:focus,
+.filtros-usuarios select:focus {
+  border-color: #db0202;
+  background: #ffa94d;
+  color: #fff;
+  box-shadow: 0 0 0 2px #ff8000;
+}
+
+.filtros-usuarios select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' fill='white' xmlns='http://www.w3.org/2000/svg'><path d='M4 6l4 4 4-4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px 18px;
+  padding-right: 36px;
+}
+
+.modal-content,
+.modal-content * {
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+}
+/* Scroll horizontal y vertical para la tabla */
+.scrollable-table {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+/* Estilo para los botones fuera del formulario */
+.botones-flotantes {
+  position: sticky;
+  bottom: 0;
+  padding: 15px 0;
+  text-align: center;
+  z-index: 10;
+  background: transparent; /* ← Esto permite que se vea el fondo original */
+}
+
+
+/* Estilo individual de los botones flotantes */
+.botones-flotantes .btn {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(to bottom, #ff7f50, #ff6347);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* Hover para mejorar interacción visual */
+.botones-flotantes .btn:hover {
+  background: linear-gradient(to bottom, #ff6347, #ff4500);
+}
+/* Contenedor exclusivo para la tabla de usuarios con scroll forzado */
+.scrollable-usuarios {
+  max-height: 300px;        /* Altura fija forzada */
+  overflow-y: auto;         /* Habilita scroll vertical */
+  overflow-x: hidden;
+  border-radius: 10px;
+  margin-top: 20px;
+  padding-right: 10px;      /* Espacio para no ocultar scrollbar */
+  scrollbar-width: thin;    /* Scroll fino en Firefox */
+  scrollbar-color: orange transparent; /* Color del scroll */
+}
+
+/* Scroll visual en navegadores basados en WebKit */
+.scrollable-usuarios::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-usuarios::-webkit-scrollbar-thumb {
+  background-color: orange;
+  border-radius: 10px;
+}
+
+.scrollable-usuarios::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* Estilo general para scroll visible con diseño salmón */
+.scrollable-contenedor {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #FFA07A transparent; /* salmon */
+}
+
+.scrollable-contenedor::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable-contenedor::-webkit-scrollbar-thumb {
+  background-color: #FFA07A; /* salmon */
+  border-radius: 10px;
+}
+
+.scrollable-contenedor::-webkit-scrollbar-track {
+  background: transparent;
+}
+

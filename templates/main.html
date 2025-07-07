@@ -1,0 +1,527 @@
+{# Extiende la plantilla base.html para reutilizar estructura y estilos comunes #}
+{% extends './base.html' %}
+
+{% block title %} Vikingo Technology {% endblock %}
+
+{% block link %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina principal.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% endblock %}
+
+{% block body %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm rounded-bottom mb-4 sticky-top">
+        <div class="container-fluid">
+            <!-- Logo y nombre -->
+            <a class="navbar-brand d-flex align-items-center" href="{{url_for('Menu')}}">
+                <img src="{{ url_for('static', filename='images/icono-logo.ico') }}" alt="Logo" width="36" class="me-2">
+                <span>
+                    <span class="fw-bold">VIKINGO </span>
+                    <span class="text-orange fw-bold">Technology</span>
+                </span>
+            </a>
+            <!-- Botón hamburguesa para móvil -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Enlaces -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contacto">Contactanos</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        {% if current_user.is_authenticated  %}
+                        <div class="dropdown">
+                            <a class="btn btn-orange fw-bold dropdown-toggle d-flex align-items-center" href="#" id="btn-login" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="me-2">👤</span> {{ usuario.nombre }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="btn-login">
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#menuOpcionesModal">Menú principal</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Cerrar sesión</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Modal Menú principal -->
+<div class="modal fade" id="menuOpcionesModal" tabindex="-1" aria-labelledby="menuOpcionesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content" style="border-radius: 16px;">
+      <div class="modal-header" style="border-bottom: none;">
+        <h5 class="modal-title fw-bold" id="menuOpcionesModalLabel">Menú principal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <a href="{{ url_for('Carrito') }}" class="text-decoration-none">
+                <div class="card shadow-sm h-100" style="cursor:pointer;">
+                  <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">Ventas</h5>
+                    <p class="card-text">Gestiona las ventas y el carrito.</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6">
+              <a href="{{ url_for('gestionar_clientes') }}" class="text-decoration-none">
+                <div class="card shadow-sm h-100" style="cursor:pointer;">
+                  <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">Registrar clientes</h5>
+                    <p class="card-text">Agrega y administra clientes.</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            {% if usuario.id_rol == 1 %}
+            <div class="col-12 col-md-6">
+              <a href="{{ url_for('gestionar_usuarios') }}" class="text-decoration-none">
+                <div class="card shadow-sm h-100" style="cursor:pointer;">
+                  <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">Registrar usuario</h5>
+                    <p class="card-text">Crea nuevos usuarios del sistema.</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6">
+              <a href="{{ url_for('gestionar_productos') }}" class="text-decoration-none">
+                <div class="card shadow-sm h-100" style="cursor:pointer;">
+                  <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">Registrar productos</h5>
+                    <p class="card-text">Agrega y administra productos.</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6">
+              <a href="{{ url_for('informes') }}" class="text-decoration-none">
+                <div class="card shadow-sm h-100" style="cursor:pointer;">
+                  <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">Informes</h5>
+                    <p class="card-text">Consulta reportes y estadísticas.</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12 col-md-6">
+              <a href="{{ url_for('historial_clientes') }}" class="text-decoration-none">
+                <div class="card shadow-sm h-100" style="cursor:pointer;">
+                  <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">Historial clientes</h5>
+                    <p class="card-text">Revisa el historial de clientes.</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+                        {% else %}
+                        <a class="btn btn-orange fw-bold" href="{{ url_for('Login') }}" id="btn-login">
+                            <span class="me-2">⮞</span> Iniciar Sesión
+                        </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero-section bg-white py-5">
+        <div class="container my-5">
+            <div class="row align-items-center">
+                <!-- Texto -->
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <span class="badge bg-warning bg-opacity-25 text-orange px-3 py-2 mb-3 d-inline-block" style="font-size:1rem;">
+                        Tecnología Para Aventureros
+                    </span>
+                    <h1 class="display-4 fw-bold mb-3">
+                        Equipo De Alta <span class="text-orange">Tecnología</span><br>
+                        Para Tus Aventuras
+                    </h1>
+                    <p class="lead text-secondary mb-4">
+                        <strong>Descubre nuestra selección de equipamiento tecnológico para camping, senderismo y deportes al aire libre. Gadgets innovadores que harán tu experiencia en la naturaleza más cómoda y segura.</strong>
+                    </p>
+                    <div class="d-flex flex-column flex-lg-row align-items-center gap-3 mb-3">
+                        <a href="{{ url_for('static', filename='pdfs/GUÍA DE EQUIPAMIENTO.pdf') }}" class="btn btn-guia-palpite btn-lg fw-bold px-4 text-center" download>
+                            <span class="me-2">📖</span> Guía De Equipamiento<br> descargala ya
+                        </a>
+                    </div>
+                    <div class="text-muted mt-2" style="font-size: 1rem;">
+                        <span class="me-2"></span>
+                    </div>
+                </div>
+                <!-- Imagen -->
+                <div class="col-lg-6 d-flex justify-content-center">
+                    <div id="carouselAventura" class="carousel slide carousel-fade carousel-custom-size shadow rounded-4 overflow-hidden" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{{ url_for('static', filename='images/pixlr-image-generator-c6efcfb8-7d7a-42d3-b0f9-c7dc3757c66f.png') }}" class="d-block w-100 h-100" alt="Campamento 1">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ url_for('static', filename='images/7 deportes extremos para realizar outdoor después de la cuarentena-1.webp') }}" class="d-block w-100 h-100" alt="Campamento 2">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ url_for('static', filename='images/pixlr-image-generator-0dd70735-a700-4084-a3ae-cef3d0a90a06.png') }}" class="d-block w-100 h-100" alt="Campamento 3">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ url_for('static', filename='images/pixlr-image-generator-453c21ae-e3e7-4b33-b1e6-156d7ac69a1c.png') }}" class="d-block w-100 h-100" alt="Campamento 4">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="{{ url_for('static', filename='images/pixlr-image-generator-8fca199f-714e-449e-a6d9-dd3c66fe7358.png') }}" class="d-block w-100 h-100" alt="Campamento 5">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselAventura" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                            <span class="visually-hidden">Anterior</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselAventura" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                            <span class="visually-hidden">Siguiente</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTOS DESTACADOS -->
+    <section class="bg-light-gray py-5">
+        <div class="container my-5">
+            <div class="row justify-content-center g-4">
+                <h2 class="fw-bold">
+                    <span class="text-white">Productos</span> <span class="text-orange">Destacados</span>
+                </h2>
+                <div class="mb-3" style="font-size:1.1rem;">
+                    <em><strong class="text-white">Nuestra selección premium de tecnología outdoor para elevar tu experiencia.</strong></em>
+                    <a href="#" class="float-end text-decoration-none fw-bold text-white ver-todos-link" style="font-size:1rem;">Ver todos &gt;</a>
+                </div>
+            </div>
+            <div class="container my-5">
+                <div class="row g-4 justify-content-center">
+<!-- Producto 1 -->
+<div class="col-md-4">
+    <div class="bg-white rounded-4 shadow-sm p-3 h-100 producto-card position-relative destacado-card">
+        <img src="https://garminb2cco.vtexassets.com/arquivos/ids/159955/753759280345_1.png?v=637995419605400000"
+            alt="Garmin Instinct 2"
+            class="w-100 rounded-3 mb-3 producto-card-img img-garmin-instinct"
+            style="height:180px;">
+        <span class="badge bg-orange position-absolute top-0 end-0 m-3 px-3 py-2" style="font-size:1rem;">Destacado</span>
+        <h5 class="fw-bold mt-2">🧭 Garmin Instinct 2</h5>
+        <div class="text-secondary mb-2 text-justify">
+            Reloj GPS resistente y diseñado para los entornos más extremos. Incluye funciones tácticas, sensores inteligentes y seguimiento de salud. Ideal para aventureros, deportistas y personal de campo.
+        </div>
+        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">$1450000</span>
+        <!-- Botón comprar eliminado -->
+    </div>
+</div>
+<!-- Producto 2 -->
+<div class="col-md-4">
+    <div class="bg-white rounded-4 shadow-sm p-3 h-100 producto-card position-relative destacado-card">
+        <img src="https://res.garmin.com/en/products/010-02602-00/g/37968-4-061c5b23-a943-41e1-b1c3-447e3feb42c6.jpg"
+            alt="Garmin inReach Mini 2"
+            class="w-100 rounded-3 mb-3 producto-card-img img-garmin-instinct"
+            style="height:180px;">
+        <span class="badge bg-orange position-absolute top-0 end-0 m-3 px-3 py-2" style="font-size:1rem;">Destacado</span>
+        <h5 class="fw-bold mt-2">📡 Garmin inReach Mini 2</h5>
+        <div class="text-secondary mb-2 text-justify">
+            Dispositivo de comunicación satelital compacto con GPS y mensajería global. Te mantiene conectado incluso sin señal móvil. Perfecto para expediciones, campamentos y zonas remotas.
+        </div>
+        <br><br>
+        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">1900000</span>
+        <!-- Botón comprar eliminado -->
+    </div>
+</div>
+<!-- Producto 3 -->
+<div class="col-md-4">
+    <div class="bg-white rounded-4 shadow-sm p-3 h-100 producto-card position-relative destacado-card">
+        <img src="https://m.media-amazon.com/images/I/61zZ0oyDDWL._AC_SL1000_.jpg"
+            alt="Fenix PD36R Pro"
+            class="w-100 rounded-3 mb-3 producto-card-img img-garmin-instinct"
+            style="height:180px;">
+        <span class="badge bg-orange position-absolute top-0 end-0 m-3 px-3 py-2" style="font-size:1rem;">Destacado</span>
+        <h5 class="fw-bold mt-2">🔦 Fenix PD36R Pro</h5>
+        <div class="text-secondary mb-2 text-justify">
+            Linterna táctica de alto rendimiento con luz LED ultrabrillante, recargable por USB-C y con hasta 1600 lúmenes. Compacta y duradera, ideal para rescates, senderismo nocturno o uso militar.
+        </div>
+        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">580000</span>
+        <!-- Botón comprar eliminado -->
+    </div>
+</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BENEFICIOS -->
+    <section class="bg-light-gray py-5">
+        <div class="container my-5">
+            <h2 class="fw-bold text-center mb-2">
+                <span class="text-white">¿Por qué elegir</span> <span class="text-orange">VIKINGO Technology</span><span class="text-white">?</span>
+            </h2>
+            <p class="text-center text-secondary mb-4" style="max-width:600px;margin:auto;">
+                <strong class="text-white"><em>Desde 2010 ayudando a aventureros a potenciar sus experiencias con tecnología de vanguardia.<br><br></em></strong>
+            </p>
+            <div class="row g-4 justify-content-center">
+                <!-- Beneficio 1 -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="rounded-4 p-4 h-100 text-center shadow-sm beneficio-card" style="background: linear-gradient(135deg, #ff8000 0%, #db0202ef 50%, #c43004 100%); color: #fff; border: none;">
+                        <div class="mb-3" style="font-size:2.2rem; color:#fff;">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2" style="color:#fff;">Calidad Garantizada</h5>
+                        <div style="color:#fff;">Todos nuestros productos están testeados en condiciones extremas</div>
+                    </div>
+                </div>
+                <!-- Beneficio 2 -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="rounded-4 p-4 h-100 text-center shadow-sm beneficio-card" style="background: linear-gradient(135deg, #ff8000 0%, #db0202ef 50%, #c43004 100%); color: #fff; border: none;">
+                        <div class="mb-3" style="font-size:2.2rem; color:#fff;">
+                            <i class="bi bi-lightbulb"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2" style="color:#fff;">Innovación Constante</h5>
+                        <div style="color:#fff;">Incorporamos las últimas tecnologías a nuestros equipos</div>
+                    </div>
+                </div>
+                <!-- Beneficio 3 -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="rounded-4 p-4 h-100 text-center shadow-sm beneficio-card" style="background: linear-gradient(135deg, #ff8000 0%, #db0202ef 50%, #c43004 100%); color: #fff; border: none;">
+                        <div class="mb-3" style="font-size:2.2rem; color:#fff;">
+                            <i class="bi bi-geo-alt"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2" style="color:#fff;">Asesoramiento Experto</h5>
+                        <div style="color:#fff;">Nuestro equipo está formado por amantes del outdoor</div>
+                    </div>
+                </div>
+                <!-- Beneficio 4 -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="rounded-4 p-4 h-100 text-center shadow-sm beneficio-card" style="background: linear-gradient(135deg, #ff8000 0%, #db0202ef 50%, #c43004 100%); color: #fff; border: none;">
+                        <div class="mb-3" style="font-size:2.2rem; color:#fff;">
+                            <i class="bi bi-sun"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2" style="color:#fff;">Compromiso Ecológico</h5>
+                        <div style="color:#fff;">Reducimos nuestro impacto ambiental con materiales sostenibles</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section class="py-5" style="background: #5f6571;">
+        <div class="container text-white">
+            <h2 class="fw-bold text-center mb-2">
+                Lo Que Dicen Nuestros <span class="text-orange">Aventureros</span>
+            </h2>
+            <p class="text-center mb-5" style="max-width:700px;margin:auto;">
+                <em><strong>Miles de excursionistas, campistas y amantes del aire libre confían en VIKINGO Technology para sus aventuras.</strong></em>
+            </p>
+            <div class="row g-4 justify-content-center">
+                <!-- Testimonio 1 -->
+                <div class="col-md-4">
+                    <div class="testimonial-card p-4 rounded-4 shadow-sm h-100 bg-light text-white">
+                        <div class="mb-2 text-orange" style="font-size:1.2rem;">
+                            ★★★★★
+                        </div>
+                        <div class="mb-3">
+                            "Los equipos de Vikingo Technology son resistentes, ligeros y confiables. Gracias a su tecnología, escalar es más seguro y puedo concentrarme solo en disfrutar la aventura."
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Lía Montenegro" class="rounded-circle" style="width:40px; height:40px; object-fit:cover;">
+                            <div>
+                                <div class="fw-bold">Lía Montenegro</div>
+                                <div style="font-size:0.95rem;">Profesión: Ingeniera ambiental <br>Actividad al aire libre: Escalada en roca </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonio 2 -->
+                <div class="col-md-4">
+                    <div class="testimonial-card p-4 rounded-4 shadow-sm h-100 bg-light text-white">
+                        <div class="mb-2 text-orange" style="font-size:1.2rem;">
+                            ★★★★★
+                        </div>
+                        <div class="mb-3">
+                            "Acampar con los productos de Vikingo Technology ha cambiado mis expediciones. Son duraderos, fáciles de montar y me protegen en cualquier clima. ¡Totalmente recomendados!"
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Gabriel Torres" class="rounded-circle" style="width:40px; height:40px; object-fit:cover;">
+                            <div>
+                                <div class="fw-bold">Gabriel Torres</div>
+                                <div style="font-size:0.95rem;">Profesión: Fotógrafo de naturaleza<br> Actividad al aire libre: Camping en zonas remotas</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Testimonio 3 -->
+                <div class="col-md-4">
+                    <div class="testimonial-card p-4 rounded-4 shadow-sm h-100 bg-light text-white">
+                        <div class="mb-2 text-orange" style="font-size:1.2rem;">
+                            ★★★★★
+                        </div>
+                        <div class="mb-3">
+                            "En el rafting, cada segundo cuenta. Con Vikingo Technology me siento segura y equipada para enfrentar la corriente. ¡Calidad que se siente desde el primer uso!"
+                        </div>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Valentina Ríos" class="rounded-circle" style="width:40px; height:40px; object-fit:cover;">
+                            <div>
+                                <div class="fw-bold">Valentina Ríos</div>
+                                <div style="font-size:0.95rem;">Profesión: Chef internacional<br>Actividad al aire libre: Rafting en ríos de montaña</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BANNER DESTACADO -->
+    <section class="py-5" style="background: #5f6571;">
+        <div class="container my-5">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="banner-naranja d-flex flex-column flex-lg-row align-items-center justify-content-between p-4 p-lg-5 rounded-4"
+                        style="background: linear-gradient(135deg, #ff8000 0%, #db0202ef 50%, #c43004 100%);">
+                        <!-- Texto -->
+                        <div class="text-white mb-4 mb-lg-0" style="max-width: 520px;">
+                            <h2 class="fw-bold mb-4" style="font-size:2.5rem;">
+                                Equipa Tu Próxima Aventura Con La Mejor Tecnología
+                            </h2>
+                            <ul class="list-unstyled mb-4 fs-5">
+                                <li class="mb-2"><i class="bi bi-check-circle me-2"></i>Garantía De 2 Años En Todos Los Productos</li>
+                                <li class="mb-2"><i class="bi bi-check-circle me-2"></i>Soporte Técnico Especializado 24/7</li>
+                                <li class="mb-2"><i class="bi bi-check-circle me-2"></i>Prueba De 30 Días Con Devolución Garantizada</li>
+                            </ul>
+                        </div>
+                        <!-- Imagen -->
+                        <img src="https://st2.depositphotos.com/7036298/11151/i/450/depositphotos_111516530-stock-photo-three-friends-camping-with-fire.jpg"
+                            alt="Personas acampando con tecnología"
+                            class="rounded-3 shadow banner-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-vikingo mt-5 pt-5 pb-3">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-12 col-md-4 col-lg-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="{{ url_for('static', filename='images/icono-logo.ico') }}" alt="Logo Vikingo" width="32" height="32" class="me-2">
+                        <i class="bi bi-mountain fs-2 text-orange me-2"></i>
+                        <span class="fw-bold fs-5 text-orange">VIKINGO</span>
+                        <span class="fw-bold fs-5 text-white ms-1">Technology</span>
+                    </div>
+                    <div class="text-white-50 mb-3" style="max-width:220px;">
+                        Equipamiento tecnológico innovador para tus aventuras al aire libre desde 2010.
+                    </div>
+                </div>
+                <div class="col-6 col-md-2">
+                    <div class="fw-bold text-white mb-2">Productos</div>
+                    <ul class="list-unstyled text-white-50">
+                        <li><a href="#" class="footer-link">Navegación GPS</a></li>
+                        <li><a href="#" class="footer-link">Energía Solar</a></li>
+                        <li><a href="#" class="footer-link">Iluminación</a></li>
+                        <li><a href="#" class="footer-link">Comunicación</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-2">
+                    <div class="fw-bold text-white mb-2">Empresa</div>
+                    <ul class="list-unstyled text-white-50">
+                        <li><a href="#" class="footer-link">Sobre Nosotros</a></li>
+                        <li><a href="#" class="footer-link">Sostenibilidad</a></li>
+                        <li><a href="#" class="footer-link">Testimonios</a></li>
+                        <li><a href="#" class="footer-link">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-6 col-md-2">
+                    <div class="fw-bold text-white mb-2">Legal</div>
+                    <ul class="list-unstyled text-white-50">
+                        <li><a href="#" class="footer-link">Términos</a></li>
+                        <li><a href="#" class="footer-link">Privacidad</a></li>
+                        <li><a href="#" class="footer-link">Garantías</a></li>
+                        <li><a href="#" class="footer-link">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-2 d-flex flex-column align-items-md-end align-items-start justify-content-between">
+                    <div class="mb-2 mt-3 mt-md-0">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a href="#" class="footer-social-link d-flex align-items-center">
+                                    <i class="bi bi-twitter me-2"></i> Twitter
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="footer-social-link d-flex align-items-center">
+                                    <i class="bi bi-facebook me-2"></i> Facebook
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="footer-social-link d-flex align-items-center">
+                                    <i class="bi bi-instagram me-2"></i> Instagram
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="footer-social-link d-flex align-items-center">
+                                    <i class="bi bi-youtube me-2"></i> YouTube
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-secondary my-3">
+            <div class="text-white-50 small d-flex justify-content-between flex-wrap">
+                <span>© 2025 Vikingo. Todos los derechos reservados.</span>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.precio-producto').forEach(el => {
+    let valor = el.textContent.replace(/\D/g, '');
+    el.textContent = '$' + Number(valor).toLocaleString('es-CO');
+  });
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === "Escape") {
+    var modals = document.querySelectorAll('.modal.show');
+    modals.forEach(function(modal) {
+      var modalInstance = bootstrap.Modal.getInstance(modal);
+      if (modalInstance) modalInstance.hide();
+    });
+  }
+});
+</script>
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: linear-gradient(135deg, rgba(255,128,0,0.92) 0%, rgba(219,2,2,0.92) 100%); color: #fff; border-radius: 12px;">
+      <div class="modal-header" style="border-bottom: none;">
+        <h5 class="modal-title fw-bold text-white" id="logoutModalLabel">Cerrar Sesión</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+      </div>
+      <div class="modal-body text-white">
+        ¿Quieres cerrar sesión?
+      </div>
+      <div class="modal-footer" style="border-top: none;">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
+        <a href="{{ url_for('Logout') }}" class="btn btn-dark">Sí</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
