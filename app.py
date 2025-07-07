@@ -10,7 +10,7 @@ from setup_db import db, Usuario, Rol, Permiso, RolPermiso, Cliente, Producto, V
 from generador_pdf import generar_factura_pdf, generar_historial_cliente_pdf, enviar_pdf_por_correo, proteger_pdf
 
 app = Flask(__name__)
-app.secret_key = 'clave-secreta'  # Necesaria para sesiones y flash
+app.secret_key = 'w3r1T3$T@claveS3cr3ta2025'  # Necesaria para sesiones y flash
 PEDEEFES_DIR = os.path.join(app.root_path, 'static', 'pdfs')
 os.makedirs(PEDEEFES_DIR, exist_ok=True)
 
