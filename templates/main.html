@@ -221,7 +221,7 @@
         <div class="text-secondary mb-2 text-justify">
             Reloj GPS resistente y diseñado para los entornos más extremos. Incluye funciones tácticas, sensores inteligentes y seguimiento de salud. Ideal para aventureros, deportistas y personal de campo.
         </div>
-        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">$1450000</span>
+        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">$950000</span>
         <!-- Botón comprar eliminado -->
     </div>
 </div>
@@ -238,7 +238,7 @@
             Dispositivo de comunicación satelital compacto con GPS y mensajería global. Te mantiene conectado incluso sin señal móvil. Perfecto para expediciones, campamentos y zonas remotas.
         </div>
         <br><br>
-        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">1900000</span>
+        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">850000</span>
         <!-- Botón comprar eliminado -->
     </div>
 </div>
@@ -254,7 +254,7 @@
         <div class="text-secondary mb-2 text-justify">
             Linterna táctica de alto rendimiento con luz LED ultrabrillante, recargable por USB-C y con hasta 1600 lúmenes. Compacta y duradera, ideal para rescates, senderismo nocturno o uso militar.
         </div>
-        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">580000</span>
+        <span class="precio-producto fw-bold d-block mb-3" style="font-size:1.2rem;">320000</span>
         <!-- Botón comprar eliminado -->
     </div>
 </div>
@@ -518,8 +518,10 @@ document.addEventListener('keydown', function(e) {
         ¿Quieres cerrar sesión?
       </div>
       <div class="modal-footer" style="border-top: none;">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal">No</button>
-        <a href="{{ url_for('Logout') }}" class="btn btn-dark">Sí</a>
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <form action="{{ url_for('Logout') }}" method="get">
+            <button type="submit" class="btn btn-danger">Cerrar sesión</button>
+        </form>
       </div>
     </div>
   </div>

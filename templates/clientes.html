@@ -33,15 +33,19 @@
       </form>
     </div>
 
-    <div class="pagination justify-content-center mt-4">
+    <div class="pagination justify-content-center mt-4" style="display: flex; align-items: center; gap: 1rem;">
       {% if clientes.has_prev %}
-        <a href="{{ url_for('gestionar_clientes', pagina=clientes.prev_num) }}" class="btn btn-outline-secondary me-2">Anterior</a>
+        <a href="{{ url_for('gestionar_clientes', pagina=clientes.prev_num) }}" class="btn btn-paginacion btn-outline-secondary ms-2">Anterior</a>
+      {% else %}
+        <span class="btn btn-paginacion btn-outline-secondary ms-2" style="visibility: hidden;">Anterior</span>
       {% endif %}
 
       <span class="fw-bold">Página {{ clientes.page }} de {{ clientes.pages }}</span>
 
       {% if clientes.has_next %}
-        <a href="{{ url_for('gestionar_clientes', pagina=clientes.next_num) }}" class="btn btn-outline-secondary ms-2">Siguiente</a>
+        <a href="{{ url_for('gestionar_clientes', pagina=clientes.next_num) }}" class="btn btn-paginacion btn-outline-secondary ms-2">Siguiente</a>
+      {% else %}
+        <span class="btn btn-paginacion btn-outline-secondary ms-2" style="visibility: hidden;">Siguiente</span>
       {% endif %}
     </div>
 

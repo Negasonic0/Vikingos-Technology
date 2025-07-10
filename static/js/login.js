@@ -1,9 +1,9 @@
- const togglePassword = document.getElementById('togglePassword');
-      const password = document.getElementById('password');
-      const iconEye = document.getElementById('icon-eye');
+const togglePassword = document.getElementById('toggle-password');
+const password = document.getElementById('password-input');
 
-      togglePassword.addEventListener('click', function () {
-        const type = password.type === 'password' ? 'text' : 'password';
-        password.type = type;
-        iconEye.textContent = type === 'password' ? '👁️' : '🙈';
-      });
+togglePassword.addEventListener('click', function () {
+  const type = password.type === 'password' ? 'text' : 'password';
+  password.type = type;
+  // Cambia el icono si quieres:
+  togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+});

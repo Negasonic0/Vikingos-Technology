@@ -1,13 +1,13 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, jsonify, session, make_response
 from functools import wraps
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from flask_login import LoginManager, login_user, login_required, logout_user, UserMixin, current_user
 import os, json
 from datetime import timedelta, datetime # Importar timedelta para la duración de la sesión
 from werkzeug.security import check_password_hash, generate_password_hash
 from setup_db import db, Usuario, Rol, Permiso, RolPermiso, Cliente, Producto, Venta, DetalleVenta, Pago, Factura, Contactanos
-from generador_pdf import generar_factura_pdf, generar_historial_cliente_pdf, enviar_pdf_por_correo, proteger_pdf
+from generador_pdf import generar_factura_pdf, generar_historial_cliente_pdf, enviar_pdf_por_correo, proteger_pdf, generar_informe_productos_pdf
 
 app = Flask(__name__)
 app.secret_key = 'w3r1T3$T@claveS3cr3ta2025'  # Necesaria para sesiones y flash
@@ -17,7 +17,7 @@ os.makedirs(PEDEEFES_DIR, exist_ok=True)
 # *** CONFIGURACIÓN PARA SESIONES PERMANENTES ***
 # Establece la duración de la sesión permanente (ej. 31 días).
 # Si el usuario cierra el navegador y vuelve antes de este tiempo, la sesión se mantendrá.
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
+app.config['PERMANENT_SESSION_LIFETIME'] = 86400 # 24 horas (86400 segundos)
 
 # *** CORRECCIÓN: Usar 'mysql+pymysql' para el controlador PyMySQL ***
 # El dialecto 'pymql' no es reconocido por SQLAlchemy para MySQL.
@@ -175,8 +175,11 @@ def Login():
             return redirect(url_for('Login'))
 
         # Si el login es exitoso
-        session.permanent = True
-        login_user(usuario, remember=True)
+        if usuario.estado == "inactivo":
+            flash("Tu cuenta está inactiva. Por favor, contacta al administrador.", "danger")
+            return redirect(url_for('Login'))
+        session.permanent = True  # Hacer la sesión permanente
+        login_user(usuario, remember=True)  # Recuerda al usuario si la cookie 'remember_token' está activa
         session['intentos_login'] = 0
         session['ultimo_intento'] = datetime.now().isoformat()
         next_page = request.args.get('next')
@@ -664,6 +667,44 @@ def gestionar_productos():
     productos = query.order_by(Producto.id_producto.desc()).paginate(page=pagina, per_page=10)
     return render_template ('productos.html', productos=productos)
 
+#funcion para buscar el informe de ventas de productos por fecha
+def buscar_informe_ventas_por_fecha(fecha_inicio, fecha_fin):
+    try:
+        fecha_inicio_obj = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+        fecha_fin_obj = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+
+        resultados = (
+            db.session.query(
+                Producto.id_producto,
+                Producto.nombre,
+                Producto.stock,
+                func.count(DetalleVenta.id_venta).label('ventas'),
+                func.sum(DetalleVenta.cantidad).label('vendidos'),
+                func.sum(DetalleVenta.subtotal).label('total_ganado')
+            )
+            .join(DetalleVenta, Producto.id_producto == DetalleVenta.id_producto)
+            .join(Venta, DetalleVenta.id_venta == Venta.id_venta)
+            .filter(Venta.fecha_venta.between(fecha_inicio_obj, fecha_fin_obj))
+            .group_by(Producto.id_producto, Producto.nombre, Producto.stock)
+            .all()
+        )
+
+        informes = []
+        for r in resultados:
+            informes.append({
+                'id_producto': r.id_producto,
+                'nombre': r.nombre,
+                'stock': r.stock,
+                'ventas': r.ventas,
+                'vendidos': r.vendidos,
+                'total_ganado': r.total_ganado,
+            })
+        if not informes:
+            flash("No se encontraron ventas en el rango de fechas especificado", "info")
+        return informes
+    except ValueError:
+        print(f'Formato inválido: {fecha_inicio} o {fecha_fin}')
+        return []
 @app.route('/informes', methods=['GET', 'POST'])
 @login_required
 @nocache
@@ -671,10 +712,91 @@ def informes():
     if current_user.estado == "inactivo":
         flash("Tu cuenta está inactiva. Por favor, contacta al administrador.", "danger")
         return redirect(url_for('Menu'))
-    if current_user.id_rol != 1:  # Verificar si el usuario tiene rol de administrador
+
+    if current_user.id_rol != 1:  # Solo administrador
         flash("No tienes permiso para acceder a esta página", "danger")
-        return redirect(url_for('Menu'))  # Redirigir al menú si no es administrador
-    return render_template('informes.html', usuario=current_user)
+        return redirect(url_for('Menu'))
+
+    if request.method == 'POST':
+        accion = request.form.get('accion')
+
+        if accion == 'buscar':
+            try:
+                fecha_inicio = request.form.get('fecha_inicio')
+                fecha_fin = request.form.get('fecha_fin')
+                if not fecha_inicio or not fecha_fin:
+                    flash("Por favor, ingresa ambas fechas", "danger")
+                    return redirect(url_for('informes'))
+                productos = buscar_informe_ventas_por_fecha(fecha_inicio, fecha_fin)
+                if not productos:
+                    flash("No se encontraron productos en el rango de fechas especificado", "info")
+                    return render_template('informes.html', usuario=current_user, productos=productos)
+                session['fecha_inicio'] = fecha_inicio
+                session['fecha_fin'] = fecha_fin
+                return render_template('informes.html', usuario=current_user, productos=productos, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
+            except ValueError:
+                flash("Formato de fecha inválido. Usa AAAA-MM-DD.", "danger")  
+                return render_template('informes.html', usuario=current_user)            
+
+        elif accion == 'generar_pdf':
+            fecha_inicio = session.get('fecha_inicio')
+            fecha_fin = session.get('fecha_fin')
+            if not fecha_inicio or not fecha_fin:
+                flash("Por favor, realiza una búsqueda antes de generar el PDF", "danger")
+                return redirect(url_for('informes'))
+            productos = buscar_informe_ventas_por_fecha(fecha_inicio, fecha_fin)
+
+            nombre_pdf = f"Informe_Ventas_{fecha_inicio}_a_{fecha_fin}.pdf"
+            ruta_pdf = os.path.join(PEDEEFES_DIR, nombre_pdf)
+            generar_informe_productos_pdf(ruta_pdf, productos, fecha_inicio, fecha_fin)
+            archivo_pdf = f"pdfs/{nombre_pdf}"
+            
+            flash(f"PDF generado correctamente: {nombre_pdf}", "success")
+            return render_template('informes.html', usuario=current_user, archivo_pdf=archivo_pdf, productos=productos, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
+        
+        elif accion == 'enviar_pdf':
+            destinatario = request.form.get('email')
+            if not destinatario:
+                flash("Por favor, ingresa un correo electrónico", "danger")
+                return redirect(url_for('historial_clientes'))
+            fecha_inicio = session.get('fecha_inicio')
+            fecha_fin = session.get('fecha_fin')
+            productos = buscar_informe_ventas_por_fecha(fecha_inicio, fecha_fin)
+            asunto = f"Informe de Ventas de Productos del {fecha_inicio} al {fecha_fin}"   
+            mensaje = f"Adjunto el informe de ventas de productos del {fecha_inicio} al {fecha_fin}. La contraseña se la brindara algun Administrador."
+            
+            nombre_pdf = f"Informe_Ventas_{fecha_inicio}_a_{fecha_fin}.pdf"
+            ruta_pdf = os.path.join(PEDEEFES_DIR, nombre_pdf)
+            ruta_pdf_protegida = os.path.join(PEDEEFES_DIR, f"{nombre_pdf}_protegido.pdf")
+            archivo_pdf = f"pdfs/{nombre_pdf}"
+            if not os.path.exists(ruta_pdf):
+                flash("El archivo PDF no existe.", "danger")
+                return redirect(url_for('historial_clientes'))
+            proteger_pdf(ruta_pdf, ruta_pdf_protegida, "informe protegido")  # Proteger el PDF antes de enviarlo
+            
+            try:
+                enviar_pdf_por_correo(destinatario, asunto, mensaje, ruta_pdf_protegida)
+                flash("Correo enviado correctamente.", "success")
+            except Exception as e:
+                flash(f"Error al enviar correo: {e}", "danger")
+
+            # Renderiza el template pasando archivo_pdf para mantener el botón de descarga
+            return render_template('informes.html', usuario=current_user, archivo_pdf=archivo_pdf, productos=productos, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
+
+        else:
+            flash("Acción no reconocida", "danger")
+            return redirect(url_for('informes'))
+    productos = []
+    # la fecha final sera por predeterminado el dia de hoy y la fecha de inicio sera 30 dias antes de la fecha final
+    fecha_inicio = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+    fecha_fin = datetime.now().strftime('%Y-%m-%d')
+    # pero si ya se ha buscado un informe, se recuperan las fechas de la sesión
+    if 'fecha_inicio' in session and 'fecha_fin' in session:
+        fecha_inicio = session.get('fecha_inicio')
+        fecha_fin = session.get('fecha_fin')
+        if fecha_fin and fecha_inicio:
+            productos = buscar_informe_ventas_por_fecha(fecha_inicio, fecha_fin)
+    return render_template('informes.html', usuario=current_user, productos=productos, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
 
 @app.route('/historial', methods=['GET', 'POST'])
 @login_required
@@ -756,8 +878,6 @@ def historial_clientes():
     cedula_guardada = session.get('cedula_historial')
     if cedula_guardada:
         cliente, historial = obtener_historial_por_cedula(cedula_guardada)
-    pagina = request.args.get('pagina', 1, type=int)
-
 
     return render_template('historialcliente.html', usuario=current_user, cliente=cliente, historial=historial)
 @app.route('/contacto', methods=['GET', 'POST'])
@@ -800,10 +920,15 @@ def contacto():
 @login_required
 @nocache
 def Logout():
-    logout_user()
-    session.clear()
-    return redirect(url_for('Login'))
+    logout_user()  # Esto borra la sesión
+    session.clear()  # Borra datos adicionales por si acaso
+
+    # Creamos una respuesta para borrar también la cookie 'remember_token'
+    response = make_response(redirect(url_for('Login')))
+    response.set_cookie('remember_token', '', expires=0)
+
+    return response
+
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True, port=5004)

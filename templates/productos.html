@@ -33,17 +33,21 @@
     </form>
   </div>
 
-  <div class="pagination justify-content-center mt-4">
-      {% if productos.has_prev %}
-        <a href="{{ url_for('gestionar_productos', pagina=productos.prev_num) }}" class="btn btn-outline-secondary me-2">Anterior</a>
-      {% endif %}
+<div class="pagination justify-content-center mt-4" style="display: flex; align-items: center; gap: 1rem;">
+  {% if productos.has_prev %}
+    <a href="{{ url_for('gestionar_productos', pagina=productos.prev_num) }}" class="btn btn-paginacion btn-outline-secondary ms-2">Anterior</a>
+  {% else %}
+    <span class="btn btn-paginacion btn-outline-secondary ms-2" style="visibility: hidden;">Anterior</span>
+  {% endif %}
 
-      <span class="fw-bold">Página {{ productos.page }} de {{ productos.pages }}</span>
+  <span class="fw-bold">Página {{ productos.page }} de {{ productos.pages }}</span>
 
-      {% if productos.has_next %}
-        <a href="{{ url_for('gestionar_productos', pagina=productos.next_num) }}" class="btn btn-outline-secondary ms-2">Siguiente</a>
-      {% endif %}
-  </div>
+  {% if productos.has_next %}
+    <a href="{{ url_for('gestionar_productos', pagina=productos.next_num) }}" class="btn btn-paginacion btn-outline-secondary ms-2">Siguiente</a>
+  {% else %}
+    <span class="btn btn-paginacion btn-outline-secondary ms-2" style="visibility: hidden;">Siguiente</span>
+  {% endif %}
+</div>
 
   <!-- FORMULARIO CON TABLA EN CONTENEDOR SCROLL -->
   <form id="productosForm" method="post">

@@ -244,8 +244,8 @@ def registros():
 
 # ---------------- EJECUTAR CREACIÓN ---------------- #
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-        registros()
-    print("✅ Tablas creadas correctamente en MySQL")
+# if __name__ == '__main__':
+#     with app.app_context():
+#         db.create_all()
+#         registros()
+#     print("✅ Tablas creadas correctamente en MySQL")

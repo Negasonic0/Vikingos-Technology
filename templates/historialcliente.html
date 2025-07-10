@@ -50,17 +50,17 @@
         {% endif %}
       {% endwith %}
 
-      <div class="pagination justify-content-center mt-4">
+    <div class="pagination justify-content-center mt-4">
         {% if historial.has_prev %}
-            <a href="{{ url_for('historial_clientes', pagina=historial.prev_num) }}" class="btn btn-outline-secondary me-2">Anterior</a>
+            <a href="{{ url_for('historial_clientes', pagina=historial.prev_num) }}" class="btn fw-bold btn-main-orange me-2" style="min-width:120px;">Anterior</a>
         {% endif %}
 
         <span class="fw-bold">Página {{ historial.page }} de {{ historial.pages }}</span>
 
         {% if historial.has_next %}
-            <a href="{{ url_for('historial_clientes', pagina=historial.next_num) }}" class="btn btn-outline-secondary ms-2">Siguiente</a>
+            <a href="{{ url_for('historial_clientes', pagina=historial.next_num) }}" class="btn fw-bold btn-main-orange ms-2" style="min-width:120px;">Siguiente</a>
         {% endif %}
-     </div>
+    </div>
 
         <div class="table-responsive rounded-3 p-2 tabla-panel">
             <table class="table table-bordered mb-0">

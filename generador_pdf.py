@@ -192,6 +192,7 @@ def generar_factura_pdf(id_venta, archivo_salida, vendedor):
         data = [['Producto', 'Cantidad', 'Precio Unitario', 'Subtotal']]
         for prod in productos:
             producto = Producto.query.get(prod.id_producto)
+            descuento_porcentaje = prod.descuento_porcentaje if prod.descuento_porcentaje else 0
             data.append([
                 Paragraph(capitalizar(producto.nombre), style_normal),
                 str(prod.cantidad),
@@ -227,7 +228,10 @@ def generar_factura_pdf(id_venta, archivo_salida, vendedor):
         # Totales
         elements.append(Paragraph(f"<b>Subtotal:</b> {formatear_moneda(venta.total)}", style_orange))
         descuento_valor = venta.total - venta.total_con_descuento
-        elements.append(Paragraph(f"<b>Descuento:</b> {formatear_moneda(descuento_valor)}", style_orange))
+        if descuento_valor > 0:
+            elements.append(Paragraph(f"<b>Descuento:</b> {formatear_moneda(descuento_valor)} ({descuento_porcentaje}%)", style_orange))
+        else:
+            elements.append(Paragraph("<b>Descuento:</b> No se aplicó descuento", style_orange))
         elements.append(Paragraph(f"<b>Total:</b> {formatear_moneda(venta.total_con_descuento)}", style_orange))
         elements.append(Spacer(1, 16))
         elements.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#FF8000')))
@@ -273,6 +277,105 @@ def generar_factura_pdf(id_venta, archivo_salida, vendedor):
     except Exception as e:
         print(f"Error al generar la factura: {e}")
         traceback.print_exc()
+
+# Genera un PDF con el listado de productos actuales
+def generar_informe_productos_pdf(archivo_salida, productos, fecha_inicio, fecha_fin):
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, HRFlowable
+    from reportlab.lib.pagesizes import letter
+    from reportlab.lib import colors
+    from reportlab.lib.units import inch
+    from reportlab.lib.styles import ParagraphStyle
+    from reportlab.lib.enums import TA_LEFT
+
+    doc = SimpleDocTemplate(archivo_salida, pagesize=letter)
+    doc.title = "Informe de Productos"
+    doc.author = "VIKINGO Technology"
+    elements = []
+
+    style_orange = ParagraphStyle(
+        name='OrbitronBoldOrange',
+        fontName='Orbitron-Bold',
+        fontSize=12,
+        textColor=colors.HexColor('#FF8000'),
+        alignment=TA_LEFT,
+    )
+    style_normal = ParagraphStyle(
+        name='OrbitronNormal',
+        fontName='Orbitron-Regular',
+        fontSize=10,
+        textColor=colors.black,
+        alignment=TA_LEFT,
+    )
+
+    elements.append(Paragraph("<b>Informe de Productos</b>", style_orange))
+    elements.append(Spacer(1, 12))
+    elements.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#FF8000')))
+    elements.append(Spacer(1, 8))
+
+    # Información de fecha
+    if fecha_inicio and fecha_fin:
+        fecha_inicio_str = fecha_inicio.strftime('%Y-%m-%d') if isinstance(fecha_inicio, datetime) else str(fecha_inicio)
+        fecha_fin_str = fecha_fin.strftime('%Y-%m-%d') if isinstance(fecha_fin, datetime) else str(fecha_fin)
+        elements.append(Paragraph(f"Fecha de Inicio: {fecha_inicio_str}", style_normal))
+        elements.append(Paragraph(f"Fecha de Fin: {fecha_fin_str}", style_normal))
+        elements.append(Spacer(1, 8))
+
+    # Encabezados de la tabla
+    data = [[
+        'ID', 'Nombre', 'Cantidad', 'Ventas', 'Vendidos', 'Total Ganado'
+    ]]
+    total_ventas = 0
+    total_productos = 0
+    total_ganado = 0
+    for p in productos:
+        data.append([
+            str(p['id_producto']),
+            Paragraph(capitalizar(p['nombre']), style_normal),
+            str(p.get('stock', '')),
+            str(p.get('ventas', '')),
+            str(p.get('vendidos', '')),
+            formatear_moneda(p.get('total_ganado', 0))
+        ])
+        total_ventas += p.get('ventas', 0)
+        total_productos += p.get('stock', 0)
+        total_ganado += p.get('total_ganado', 0)
+
+    table_col_widths = [0.7*inch, 1.9*inch, 0.9*inch, 0.9*inch, 1.0*inch, 1.5*inch]
+    table = Table(data, colWidths=table_col_widths, repeatRows=1)
+    table_style = TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#FF8000')),
+        ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+        ('FONTNAME', (0,0), (-1,0), 'Orbitron-Bold'),
+        ('FONTSIZE', (0,0), (-1,0), 11),
+        ('ALIGN', (0,0), (-1,-1), 'CENTER'),
+        ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+        ('BOTTOMPADDING', (0,0), (-1,0), 10),
+        ('TOPPADDING', (0,0), (-1,0), 10),
+        ('BACKGROUND', (0,1), (-1,-1), colors.white),
+        ('TEXTCOLOR', (0,1), (-1,-1), colors.black),
+        ('FONTNAME', (0,1), (-1,-1), 'Orbitron-Regular'),
+        ('FONTSIZE', (0,1), (-1,-1), 10),
+        ('GRID', (0,0), (-1,-1), 1, colors.black),
+        ('LEFTPADDING', (0,0), (-1,-1), 5),
+        ('RIGHTPADDING', (0,0), (-1,-1), 5),
+    ])
+    table.setStyle(table_style)
+    elements.append(table)
+    elements.append(Spacer(1, 16))
+    elements.append(Paragraph(f"<b>Total Ventas:</b>{total_ventas}", style_orange))
+    elements.append(Paragraph(f"<b>Total Productos:</b> {total_productos}", style_orange))
+    elements.append(Paragraph(f"<b>Total Ganado:</b> {formatear_moneda(total_ganado)}", style_orange))
+    elements.append(Spacer(1, 16))
+    elements.append(HRFlowable(width="100%", thickness=1, color=colors.HexColor('#FF8000')))
+    elements.append(Spacer(1, 8))
+
+    doc.build(
+        elements,
+        onFirstPage=lambda canvas, doc: encabezado(canvas, doc, "Informe de Productos"),
+        onLaterPages=lambda canvas, doc: encabezado(canvas, doc, "Informe de Productos")
+    )
+    eliminar_pdf_tras_tiempo(archivo_salida, minutos=20)
+    print("Informe de productos generado correctamente.")
 
 def generar_historial_cliente_pdf(cedula, archivo_salida):
     try:
@@ -416,7 +519,7 @@ def generar_historial_cliente_pdf(cedula, archivo_salida):
     
 
 # def generar_informe_producto_pdf(fecha_inicio, fecha_fin, archivo_salida):
-#     conn = get_connection()
+#     conn = sqlite3.connect('database.db')
 #     if conn is None:
 #         print("No se pudo conectar a la base de datos.")
 #         return

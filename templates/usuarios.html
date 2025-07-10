@@ -26,17 +26,21 @@
       </form>
   </div>
 
-  <div class="pagination justify-content-center mt-4">
-      {% if usuarios.has_prev %}
-        <a href="{{ url_for('gestionar_usuarios', pagina=usuarios.prev_num) }}" class="btn btn-outline-secondary me-2">Anterior</a>
-      {% endif %}
+<div class="pagination justify-content-center mt-4" style="display: flex; align-items: center; gap: 1rem;">
+  {% if usuarios.has_prev %}
+    <a href="{{ url_for('gestionar_usuarios', pagina=usuarios.prev_num) }}" class="btn btn-paginacion btn-outline-secondary ms-2">Anterior</a>
+  {% else %}
+    <span class="btn btn-paginacion btn-outline-secondary ms-2" style="visibility: hidden;">Anterior</span>
+  {% endif %}
 
-      <span class="fw-bold">Página {{ usuarios.page }} de {{ usuarios.pages }}</span>
+  <span class="fw-bold">Página {{ usuarios.page }} de {{ usuarios.pages }}</span>
 
-      {% if usuarios.has_next %}
-        <a href="{{ url_for('gestionar_usuarios', pagina=usuarios.next_num) }}" class="btn btn-outline-secondary ms-2">Siguiente</a>
-      {% endif %}
-  </div>
+  {% if usuarios.has_next %}
+    <a href="{{ url_for('gestionar_usuarios', pagina=usuarios.next_num) }}" class="btn btn-paginacion btn-outline-secondary ms-2">Siguiente</a>
+  {% else %}
+    <span class="btn btn-paginacion btn-outline-secondary ms-2" style="visibility: hidden;">Siguiente</span>
+  {% endif %}
+</div>
 
   <form id="usuariosForm" method="post">
     <div class="scrollable-usuarios">

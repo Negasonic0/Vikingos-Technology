@@ -365,3 +365,136 @@ input, select {
   background: transparent;
 }
 
+@media (max-width: 576px) {
+  .usuarios-container {
+    padding: 18px 4px !important;
+    min-width: 0 !important;
+  }
+  .titulo {
+    font-size: 1.3rem !important;
+    margin-bottom: 18px !important;
+  }
+  .filtros-usuarios {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 10px 4px 8px 4px !important;
+  }
+  .filtros-usuarios input[type="text"],
+  .filtros-usuarios select {
+    min-width: 0 !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+  }
+  .usuarios-table {
+    font-size: 0.95rem !important;
+    min-width: 400px !important;
+  }
+  .scrollable-table, .scrollable-usuarios, .scrollable-contenedor {
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+    padding-right: 0 !important;
+  }
+  .btn, .botones-flotantes .btn {
+    min-width: 90px !important;
+    font-size: 0.95rem !important;
+    padding: 8px 10px !important;
+    margin: 4px 0 !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .contenedor-informes, .contenedor-principal {
+    padding: 14px 2px !important;
+    min-width: 0 !important;
+  }
+  .titulo-informe {
+    font-size: 1.2rem !important;
+    margin-bottom: 14px !important;
+  }
+  .filtros-informe, .filtros-productos {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 8px 2px 6px 2px !important;
+  }
+  .filtros-informe input,
+  .filtros-informe select,
+  .filtros-productos input,
+  .filtros-productos select {
+    min-width: 0 !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+  }
+  .tabla-informe,
+  .tabla-productos {
+    font-size: 0.95rem !important;
+    min-width: 400px !important;
+  }
+  .scrollable-table, .scrollable-informe, .scrollable-productos {
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+    padding-right: 0 !important;
+  }
+  .btn, .botones-flotantes .btn {
+    min-width: 90px !important;
+    font-size: 0.95rem !important;
+    padding: 8px 10px !important;
+    margin: 4px 0 !important;
+  }
+}
+
+/* Estilo específico para el botón Buscar en filtros */
+.filtros-usuarios .btn,
+.filtros-usuarios button[type="submit"] {
+  background: linear-gradient(135deg, #ff7b5f, #ff9050);
+  color: white;
+  font-weight: bold;
+  padding: 9px 22px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  text-decoration: none;
+  min-width: 110px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.filtros-usuarios .btn:hover,
+.filtros-usuarios button[type="submit"]:hover {
+  background: linear-gradient(135deg, #ff684d, #ff7c3a);
+  transform: scale(1.03);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.filtros-usuarios .btn:active,
+.filtros-usuarios button[type="submit"]:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  gap: 10px;
+  color: #ffffff;
+}
+
+/* Botones de paginación más pequeños y elevados */
+.btn-paginacion {
+  min-width: 70px;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  margin: 0 2px;
+  position: relative;
+  top: -8px; /* Ajusta este valor para subir o bajar más */
+}
