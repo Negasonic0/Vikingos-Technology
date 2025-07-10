@@ -24,11 +24,13 @@
     <div class="filtros-usuarios">
       <form method="get" action="{{ url_for('gestionar_clientes') }}">
         <input type="text" name="buscar" placeholder="Buscar por nombre o cédula" value="{{ request.args.get('buscar', '') }}">
-        <select name="estado">
-          <option value="">Todos</option>
-          <option value="activo" {% if request.args.get('estado') == 'activo' %}selected{% endif %}>Activo</option>
-          <option value="inactivo" {% if request.args.get('estado') == 'inactivo' %}selected{% endif %}>Inactivo</option>
-        </select>
+        {% if usuario.id_rol == 1 %}
+          <select name="estado">
+            <option value="">Todos</option>
+            <option value="activo" {% if request.args.get('estado') == 'activo' %}selected{% endif %}>Activo</option>
+            <option value="inactivo" {% if request.args.get('estado') == 'inactivo' %}selected{% endif %}>Inactivo</option>
+          </select>
+        {% endif %}
         <button type="submit">Buscar</button>
       </form>
     </div>
