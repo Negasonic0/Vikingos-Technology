@@ -503,7 +503,7 @@ def gestionar_clientes():
                     flash("Todos los campos son obligatorios", "danger")
                     return redirect(url_for('gestionar_clientes'))
                 correo_existente = Cliente.query.filter_by(correo=nuevo_correo).first()
-                if correo_existente:
+                if correo_existente and correo_existente.id_cliente != cliente.id_cliente:
                     flash("Este correo ya está registrado", "danger")
                     return redirect(url_for('gestionar_clientes'))
                 cliente.nombre_completo = nuevo_nombre
