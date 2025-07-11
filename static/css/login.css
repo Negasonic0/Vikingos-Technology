@@ -2,10 +2,14 @@ body {
   background: #232323 url("../images/fondo-vikingo.jpg") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
+  /* Asegura un comportamiento de fuente suave en diferentes navegadores */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Fuente tipo Georgia solo para títulos y subtítulo */
-.login-title, .login-subtitle {
+.login-title,
+.login-subtitle {
   font-family: 'Georgia', serif;
 }
 
@@ -17,6 +21,8 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 1;
+  padding: 20px; /* Añadido padding para evitar que el contenido toque los bordes */
+  box-sizing: border-box; /* Incluye el padding en el ancho total */
 }
 
 .logo-bg {
@@ -25,12 +31,12 @@ body {
   left: 50%;
   transform: translate(-50%, -55%);
   z-index: 0;
-  width: 950px;   /* Imagen de fondo más grande */
+  width: 950px;
   height: 950px;
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0.04; /* Más transparente */
+  opacity: 0.04;
   pointer-events: none;
   animation: fadeInLogin 2.0s ease forwards;
 }
@@ -38,14 +44,15 @@ body {
 .logo-bg img {
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 4px 24px rgba(0,0,0,0.3));
-  opacity: 0.8; /* Opacidad más alta para el fondo */
+  filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.3));
+  opacity: 0.8;
 }
 
 .login-header {
   margin-bottom: 30px;
   position: relative;
   z-index: 2;
+  text-align: center; /* Centra el texto en el encabezado */
 }
 
 .login-title {
@@ -55,11 +62,10 @@ body {
   text-shadow: 2px 2px 8px #000;
   margin-top: 40px;
   margin-bottom: 0.5rem;
-  font-family: 'Georgia', serif;
 }
 
 .login-barra {
-  width: 100px; /* Más ancha para parecerse a la imagen */
+  width: 100px;
   height: 6px;
   background: #ff6d2d;
   border-radius: 4px;
@@ -71,26 +77,25 @@ body {
   font-size: 1.4rem;
   margin-bottom: 35px;
   text-shadow: 1px 1px 6px #000;
-  font-family: 'Georgia', serif;
 }
 
 .login-form {
-  background: rgba(255,255,255,0.93);
+  background: rgba(255, 255, 255, 0.93);
   border-radius: 24px;
-  padding: 90px 50px 90px 50px; /* Más alto y más ancho */
+  padding: 90px 50px; /* Unificado para mantener la coherencia */
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
   width: 100%;
-  max-width: 500px; /* Más ancho */
+  max-width: 500px;
   margin: 0 auto;
-  min-height: 650px;      /* Más alto */
+  min-height: 650px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   position: relative;
   z-index: 2;
-  /* Fade-in suave */
   opacity: 0;
   animation: fadeInLogin 2.5s ease forwards;
+  box-sizing: border-box; /* Incluye el padding y el borde en el ancho/alto total */
 }
 
 /* Espacio extra arriba de los campos */
@@ -106,6 +111,8 @@ body {
   padding: 18px 14px;
   border: 1px solid #e0e0e0;
   margin-bottom: 1.2rem;
+  width: 100%; /* Asegura que el input ocupe el ancho completo disponible */
+  box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
 }
 
 .form-control:focus {
@@ -123,9 +130,11 @@ body {
   font-weight: bold;
   border-radius: 10px;
   width: 100%;
-  margin-top: 60px; /* Más espacio arriba del botón */
+  margin-top: 60px;
   box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.10);
   transition: background 0.2s;
+  padding: 15px 20px; /* Añadido padding para que el botón sea más cómodo al tacto */
+  cursor: pointer; /* Indica que es un elemento clickeable */
 }
 
 .btn-orange:hover {
@@ -138,17 +147,115 @@ body {
   height: 120px;
   display: block;
   margin: 40px auto 0 auto;
-  filter: drop-shadow(0 4px 24px rgba(0,0,0,0.3));
+  filter: drop_shadow(0 4px 24px rgba(0, 0, 0, 0.3));
 }
 
 /* Animación fade-in para el login */
 @keyframes fadeInLogin {
   from {
     opacity: 0;
-    /* transform: translateY(40px); */ /* Elimina esta línea */
   }
   to {
     opacity: 1;
-    /* transform: translateY(0); */    /* Elimina esta línea */
+  }
+}
+
+---
+
+### **Consideraciones para la Responsividad**
+
+He añadido las siguientes **media queries** para asegurar que tu diseño se adapte bien a diferentes tamaños de pantalla:
+
+```css
+/* Media Queries para hacer el diseño responsive */
+
+/* Pantallas pequeñas (teléfonos) */
+@media (max-width: 768px) {
+  .login-title {
+    font-size: 2.5rem; /* Reduce el tamaño del título principal */
+    margin-top: 20px; /* Ajusta el margen superior */
+  }
+
+  .login-subtitle {
+    font-size: 1.2rem; /* Reduce el tamaño del subtítulo */
+    margin-bottom: 25px; /* Ajusta el margen inferior */
+  }
+
+  .login-form {
+    padding: 40px 25px; /* Reduce el padding del formulario para pantallas más pequeñas */
+    min-height: auto; /* Permite que la altura se ajuste automáticamente */
+    margin-top: 20px; /* Pequeño margen superior para separar del título */
+    margin-bottom: 20px; /* Pequeño margen inferior */
+  }
+
+  .login-form .form-control {
+    margin-top: 20px; /* Reduce el margen superior de los campos de formulario */
+  }
+
+  .btn-orange {
+    margin-top: 30px; /* Reduce el margen superior del botón */
+    font-size: 1.1rem; /* Reduce ligeramente el tamaño de la fuente del botón */
+  }
+
+  .login-logo-grande {
+    width: 90px; /* Reduce el tamaño del logo grande */
+    height: 90px;
+    margin-top: 20px; /* Ajusta el margen superior */
+  }
+
+  .logo-bg {
+    width: 600px; /* Reduce el tamaño del logo de fondo */
+    height: 600px;
+    opacity: 0.02; /* Reduce aún más la opacidad para que no compita tanto en pantallas pequeñas */
+  }
+}
+
+/* Pantallas muy pequeñas (teléfonos en modo horizontal o dispositivos compactos) */
+@media (max-width: 480px) {
+  .login-title {
+    font-size: 2rem;
+    margin-top: 15px;
+  }
+
+  .login-subtitle {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .login-form {
+    padding: 30px 20px;
+  }
+
+  .login-barra {
+    width: 80px; /* Reduce el ancho de la barra */
+  }
+
+  .logo-bg {
+    width: 400px; /* Aún más pequeño el logo de fondo */
+    height: 400px;
+    opacity: 0.01; /* Muy sutil en pantallas muy pequeñas */
+  }
+}
+
+/* Pantallas medianas (tablets y laptops pequeñas) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .login-title {
+    font-size: 3rem;
+  }
+
+  .login-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .login-form {
+    max-width: 450px; /* Ajusta el ancho máximo para tablets */
+    padding: 70px 40px;
+    min-height: 600px;
+  }
+
+  .logo-bg {
+    width: 800px;
+    height: 800px;
+    opacity: 0.03;
   }
 }

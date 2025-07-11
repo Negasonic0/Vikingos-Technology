@@ -608,3 +608,40 @@ body {
   color: black;
 }
 
+@media (max-width: 576px) {
+  /* Mantén los elementos en fila, pero reduce espacios y tamaños */
+  .card-body .d-flex {
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.3rem !important;
+  }
+  .card-body .btn-outline-secondary,
+  .card-body .btn-remove-item,
+  .bi-x {
+    width: 22px !important;
+    height: 22px !important;
+    font-size: 0.95rem !important;
+    margin: 0 2px !important;
+  }
+  .card-body .mx-2.fs-5 {
+    font-size: 1rem !important;
+    min-width: 16px !important;
+    margin: 0 2px !important;
+  }
+  .card-body .fw-bold,
+  .card-body .precio-producto {
+    font-size: 1rem !important;
+    margin: 0 2px !important;
+    white-space: nowrap !important;
+  }
+  /* Ajusta el padding del card-body */
+  .card-body {
+    padding: 10px !important;
+  }
+  /* Imagen del producto más pequeña */
+  .card-body img {
+    width: 38px !important;
+    height: 38px !important;
+    margin-right: 6px !important;
+  }
+}

@@ -90,14 +90,13 @@
 
                     {% for item in historial.items %}
                     <tr>
-                        <td>{{ item.id_venta }}</td>
-                        <td>{{ item.fecha }}</td>
-                        <td>{{ item.producto }}</td>
-                        <td>{{ item.cantidad }}</td>
-                        {# Aplicando el filtro de formato de moneda #}
-                        <td>{{ item.precio_unitario | currency_format }}</td>
-                        <td>{{ item.subtotal | currency_format }}</td>
-                        <td>{{ item.total | currency_format }}</td>
+                        <td data-label="ID">{{ item.id_venta }}</td>
+                        <td data-label="Fecha Compra">{{ item.fecha }}</td>
+                        <td data-label="Producto">{{ item.producto }}</td>
+                        <td data-label="Cantidad">{{ item.cantidad }}</td>
+                        <td data-label="Precio Unitario">{{ item.precio_unitario | currency_format }}</td>
+                        <td data-label="Subtotal">{{ item.subtotal | currency_format }}</td>
+                        <td data-label="Total">{{ item.total | currency_format }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
